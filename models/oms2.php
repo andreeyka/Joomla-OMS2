@@ -26,7 +26,7 @@ class oms2ModelOms2 extends Jmodel
 	public function getOrders()
 	{
 		if (empty($this->_orders))	{
-			$query 	= 'SELECT time,item,site,item_url,status'
+			$query 	= 'SELECT id,time,item,site,item_url,status'
 					. ' FROM ' . $this->_db->nameQuote('#__ordermanagementsystem')
 					#. ' WHERE `user_id` = '.$user->id
 					. ' ORDER BY id';

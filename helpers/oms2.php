@@ -18,6 +18,37 @@ defined('_JEXEC') or die('Restricted access');
 // Component Helper
 
 jimport('joomla.application.component.helper');
+jimport('joomla.html.grid');
+
+
+
+class oms2HtmlTable  extends JGrid {
+	
+	function addTable($param,$options=false) {
+		$id=0;
+		$this->columns=array_keys(get_object_vars($param[0]));
+		foreach ($param as $row) {
+			$this->rows[$id]['_row']=array(	'class'=>'row_'.$id.' order_status_'.$row->status,
+											'id'=>'order_'.$row->id);
+			foreach ($row as $name=>$value) {
+				$cell=new stdClass();
+				$cell->options=array('class'=>'cell');
+				$cell->content=$value;
+				$this->rows[$id][$name]=$cell;
+			}
+			$this->activeRow=$id++;
+		}
+		if(is_int($options['header'])){
+			$this->specialRows['header']=array($options['header']=>$options['header']);
+		}
+		if(is_int($options['footer'])){
+			if($options['footer']=-1) $options["footer"]=$this->activeRow;
+			$this->specialRows['footer']=array($options['footer']=>$options['footer']);
+		}
+	}
+	
+}
+
 class oms2Helper
 {
 	// Your custom code here

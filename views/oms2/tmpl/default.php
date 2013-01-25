@@ -16,6 +16,14 @@
 defined('_JEXEC') or die('Restricted access');
 
 // Your custom code here
+foreach ($this->orders as $key=>$order) {
+	
+	unset($order->item_url);
+	unset($order->id);
+	$this->orders[$key]=$order;
+}
 
-
+$table2=new oms2HtmlTable;
+$table2->addTable($this->orders,array('header'=>0,'footer'=>-1));
+echo $table2->toString();
 ?>
