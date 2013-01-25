@@ -27,6 +27,10 @@ class oms2Controller extends JController
 	{
 		parent::__construct();
 	}
+	
+	public function display ($cachable = false, $urlparams = false) {
+		parent::display($cachable, $urlparams);
+	}
 
 
 

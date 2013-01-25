@@ -18,14 +18,21 @@ defined('_JEXEC') or die('Restricted access');
 // Component Helper
 
 jimport('joomla.application.component.helper');
-
 class oms2Helper
 {
-
-
-
 	// Your custom code here
-
+	static public function user_name ($id=null) {
+		$user = JFactory::getUser();
+		oms2Helper::debug($user);
+		
+	}
+	
+	static public function debug($param) {
+			echo "<pre>";
+			print_r($param);
+			echo "</pre>";
+			die();;
+	}
 
 
 }

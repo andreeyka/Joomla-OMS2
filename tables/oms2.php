@@ -1,6 +1,4 @@
 <?php
-<?php
-// ������ �� ������� �������
 defined('_JEXEC') or die('Restricted access');
 
 class TableOms extends JTable
@@ -31,3 +29,4 @@ class TableOms extends JTable
 		parent::__construct('#__ordermanagementsystem', 'id', $db);
 	}
 }
+

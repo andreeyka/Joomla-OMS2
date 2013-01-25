@@ -19,13 +19,11 @@ jimport( 'joomla.application.component.view' );
 
 class oms2ViewOms2 extends Jview
 {
-	function _display($tpl = null){
+	function display($tpl = null){
 		// global $mainframe;
-
-
-
+		$this->assign('rows', $this->get('Orders'));
+		oms2Helper::debug($this);
 		parent::display($tpl);
-
 	}
 
 }

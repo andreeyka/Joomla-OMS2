@@ -22,6 +22,20 @@ class oms2ModelOms2 extends Jmodel
 	function __construct(){
 		parent::__construct();
 	}
+	
+	public function getOrders()
+	{
+		if (empty($this->_orders))	{
+			$query 	= 'SELECT time,item,site,item_url,status'
+					. ' FROM ' . $this->_db->nameQuote('#__ordermanagementsystem')
+					#. ' WHERE `user_id` = '.$user->id
+					. ' ORDER BY id';
+			$this->_db->setQuery($query);
+			$this->_orders = $this->_db->loadObjectList();
+		}
+	
+		return $this->_orders;
+	}
 
 
 
