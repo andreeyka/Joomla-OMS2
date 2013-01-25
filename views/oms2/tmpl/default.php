@@ -19,7 +19,7 @@ defined('_JEXEC') or die('Restricted access');
 foreach ($this->orders as $key=>$order) {
 	
 	unset($order->item_url);
-	unset($order->id);
+	#unset($order->id);
 	$this->orders[$key]=$order;
 }
 
