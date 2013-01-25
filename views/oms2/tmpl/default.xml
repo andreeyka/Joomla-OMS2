@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="oms2 Layout">
+		<message>
+			<![CDATA[oms2 Layout]]>
+		</message>
+	</layout>
+	<state>
+		<name>oms2 Layout</name>
+		<description>oms2 Layout</description>
+		<params>
+		</params>
+	</state>
+</metadata>
