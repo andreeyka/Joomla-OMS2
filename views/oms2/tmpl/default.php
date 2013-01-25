@@ -17,13 +17,16 @@ defined('_JEXEC') or die('Restricted access');
 
 // Your custom code here
 foreach ($this->orders as $key=>$order) {
-	
-	unset($order->item_url);
-	#unset($order->id);
+	$order->time=substr($order->time, 0,10);
+	$order->item=JHtml::link($order->item_url,$order->item.' ('.$order->site.')');
+	$order->status=oms2Helper::getStatus($order->status);	
 	$this->orders[$key]=$order;
 }
 
 $table2=new oms2HtmlTable;
+$table2->allow_columns=array('item','time','status');
+
 $table2->addTable($this->orders,array('header'=>0,'footer'=>-1));
+oms2Helper::debug($this);
 echo $table2->toString();
 ?>

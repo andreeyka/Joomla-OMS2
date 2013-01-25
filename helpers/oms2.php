@@ -26,14 +26,14 @@ class oms2HtmlTable  extends JGrid {
 	
 	public  $allow_columns=false;
 	
-	function addTable($param,$options=false,$columns=false) {
+	function addTable($param,$options=false) {
 		$id=0;
 		$this->columns=array_keys(get_object_vars($param[0]));
 		foreach ($param as $row) {
 			$this->rows[$id]['_row']=array(	'class'=>'row_'.$id.' order_status_'.$row->status,
 											'id'=>'order_'.$row->id);
 			foreach ($row as $name=>$value) {
-				if (!$columns or in_array($name, $columns)){
+				if (!$this->allow_columns or in_array($name, $this->allow_columns)){
 					$cell=new stdClass();
 					$cell->options=array('class'=>'cell');
 					$cell->content=$value;
@@ -56,10 +56,23 @@ class oms2HtmlTable  extends JGrid {
 class oms2Helper
 {
 	// Your custom code here
+	static  $allowed_status=[1,2,3,4,5];
+	
 	static public function user_name ($id=null) {
 		$user = JFactory::getUser();
-		oms2Helper::debug($user);
-		
+	}
+	
+	static public function getStatus($status){
+		if (in_array($status, self::$allowed_status)) {
+			return JText::_('OMS STATUS'.$status);
+		}
+	}
+	
+	static public function getAllStatus(){
+		foreach (self::$allowed_status as $key) {
+			$allStatus[$key]=self::getStatus($key);
+		}
+		return $allStatus;
 	}
 	
 	static public function debug($param) {
