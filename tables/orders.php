@@ -1,9 +1,9 @@
 <?php
 defined('_JEXEC') or die('Restricted access');
 
-class TableOms extends JTable
+class TableOrders extends JTable
 {
-	public $id = null;
+	public  $id = null;
 	public $time = null;
 	public $user_id = null;
 	public $item = null;
@@ -16,11 +16,11 @@ class TableOms extends JTable
 	public $price = null;
 	public $currency = null;
 	public $currency_rate = null;
-	public $interest = null;
-	public $tax = null;
+	public $interest = 10;
+	public $tax = 0;
 	public $weight = null;
 	public $notes = null;
-	public $status = null;
+	public $status = 0;
 
 
 

@@ -28,9 +28,13 @@ class oms2HtmlTable  extends JGrid {
 	
 	function addTable($param,$options=false) {
 		$id=0;
-		$this->columns=array_keys(get_object_vars($param[0]));
+		if(is_array($this->allow_columns)) {
+			$this->columns=$this->allow_columns;
+		}else{
+			$this->columns=array_keys(get_object_vars($param[0]));
+		}
 		foreach ($param as $row) {
-			$this->rows[$id]['_row']=array(	'class'=>'row_'.$id.' order_status_'.$row->status,
+			$this->rows[$id]['_row']=array(	'class'=>'row'.($id % 2).' order_status'.$row->status,
 											'id'=>'order_'.$row->id);
 			foreach ($row as $name=>$value) {
 				if (!$this->allow_columns or in_array($name, $this->allow_columns)){
@@ -81,7 +85,23 @@ class oms2Helper
 			echo "</pre>";
 			die();;
 	}
-
-
 }
+
+class oms2User {
+	public $id;
+	protected $name;
+	public $orders;
+	function __construct($id=FALSE){
+		$user = JFactory::getUser();
+		$this->id=$user->get('id');
+		$this->name=$user->get('name');
+		$this->username=$user->get('username');
+	}
+}
+
+
+
+
+
+
 ?>

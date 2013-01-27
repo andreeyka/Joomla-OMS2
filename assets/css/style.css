@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+#order-container div {
+	border: 1px solid gray;
+	margin: 1px;
+	padding: 1px;
+	border-radius: 1px;
+	text-align: center;
+	text-align: inherit;
+	
+}
+#order-container ul {
+	vertical-align: top;
+}
+#order-container a {
+	border-radius: 5px;
+	text-decoration: none;
+}
+
+span.url {
+	
+}

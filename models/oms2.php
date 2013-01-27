@@ -19,22 +19,216 @@ jimport( 'joomla.application.component.model' );
 
 class oms2ModelOms2 extends Jmodel
 {
+	private $user;
+	
 	function __construct(){
+		$this->user = JFactory::getUser();
 		parent::__construct();
 	}
 	
-	public function getOrders()
+	function getOrder()
 	{
-		
-		$query 	= 'SELECT id,time,item,site,item_url,status'
-				. ' FROM ' . $this->_db->nameQuote('#__ordermanagementsystem')
-				#. ' WHERE `user_id` = '.$user->id
-				. ' ORDER BY id';
-		$this->_db->setQuery($query);
-		return  $this->_db->loadObjectList();
+		$order = $this->getTable('Orders');
+		$order->load(JRequest::getCMD('id'));
+		$order->total=round($order->price*$order->amount*(1+$order->tax/100)*(1+$order->interest/100)*$order->currency_rate,2);
+		return $order;
 	}
 
-
-
+	function paymentConfirm($id)
+	{
+		$payment = $this->getTable('payments');
+		$payment->load($id);
+		$payment->status=1;
+		if ($payment->check())
+		{
+			if (!$payment->store())
+			{
+				$this->setError($payment->getError());
+				return false;
+			}
+		}
+		else
+		{
+			$this->setError($payment->getError());
+			return false;
+		}
+		return true;
+	}
+		
+	function getOmsUserOrders(){
+		$omsuser = new oms2User();
+		$omsuser->user=$this->user;
+		$omsuser->orders=$this->getOrdersById($this->user->id);
+		$omsuser->ordersSum=round($this->getOrdersCosts(),2);
+		$omsuser->paymentsByStatus=$this->getPaymentsByStatus();
+		return $omsuser;
+	}
+	
+	function getOmsUserPayments(){
+		$omsuser = new oms2User();
+		$omsuser->user=$this->user;
+		$omsuser->ordersSum=round($this->getOrdersCosts(),2);
+		$omsuser->paymentsByStatus=$this->getPaymentsByStatus();
+		$omsuser->payments=$this->getPaymentsById($this->user->id);
+		return $omsuser;
+	}
+	
+	function  getOrdersById($id){
+		$omsuser = new oms2User();
+		$query 	= 'SELECT *'
+				. ' FROM ' . $this->_db->nameQuote('#__ordermanagementsystem')
+				. ' WHERE `user_id` = '.$id
+				. ' ORDER BY id';
+		$this->_db->setQuery($query);
+		return $this->_db->loadObjectList();
+	}
+	
+	function getPaymentsById($id){
+		$query 	= 'SELECT *'
+				. ' FROM ' . $this->_db->nameQuote('#__ordermanagementsystem_payments')
+				. ' WHERE `user_id` = '.$id
+				. ' ORDER BY id';
+		$this->_db->setQuery($query);
+		return $this->_db->loadObjectList();
+	}
+	
+	function getOrdersCosts(){
+		#$user = JFactory::getUser();
+		$query 	= 'SELECT sum(price*amount*(1+tax/100)*(1+interest/100)*currency_rate) as ordersSum'
+				. ' FROM ' . $this->_db->nameQuote('#__ordermanagementsystem')
+				. ' WHERE `user_id` = '.$this->user->id
+				. ' ORDER BY id';
+		$this->_db->setQuery($query);
+		$orders=$this->_db->loadObjectList();
+		return $orders[0]->ordersSum;
+	}
+	
+	function getPaymentsByStatus(){
+		$query 	= 'SELECT status, sum(value) as paymentsSum'
+				. ' FROM ' . $this->_db->nameQuote('#__ordermanagementsystem_payments')
+				. ' WHERE `user_id` = '.$this->user->id
+				. ' GROUP BY status';
+		$this->_db->setQuery($query);
+		$paiments=$this->_db->loadObjectList();
+		$paymentsByStatus[0]=0;
+		$paymentsByStatus[1]=0;
+		foreach ($this->_db->loadObjectList() as $key){
+			$paymentsByStatus[$key->status]=$key->paymentsSum;
+		}
+		return $paymentsByStatus;
+	}
+	
+	function addOrder() {
+		
+		$data = JRequest::get('post');
+		$data['order-site']=preg_replace('/http:\/\/anonymouse.org\/cgi-bin\/anon-www.cgi/', '', $data['order-url']);
+		preg_match('/:\/\/([a-z0-9\.]+)\//i',$data['order-site'],$matches);
+		
+		$order = $this->getTable('Orders');
+		
+		$order->item=$data['order-item'];
+		$order->item_url=$data['order-url'];
+		$order->article=$data['order-article'];
+		$order->size=$data['order-size'];
+		$order->color=$data['order-color'];
+		$order->amount=$data['order-price'];
+		$order->price=str_replace(',','.',$data['order-price']);
+		$order->currency=$data['order-currency'];
+		$order->notes=$data['order-notes'];
+		$order->user_id=$this->user->id;
+		$order->site=$matches[1];
+		$order->currency_rate=str_replace(',','.',$this->getCurrencyRate($order->currency));
+		
+		if ($order->check())
+		{
+			if (!$order->store())
+			{
+				$this->setError($order->getError());
+				return false;
+			}
+		}
+		else
+		{
+			$this->setError($order->getError());
+			return false;
+		}
+		return true;
+	}
+	
+	function saveOrder() {
+	
+		$data = JRequest::get('post');
+		$data['order-site']=preg_replace('/http:\/\/anonymouse.org\/cgi-bin\/anon-www.cgi/', '', $data['order-url']);
+		preg_match('/:\/\/([a-z0-9\._-]+)\//i',$data['order-site'],$matches);
+			
+		$order = $this->getTable('Orders');
+		$order->load($data['id']);
+		
+		$order->item=$data['order-item'];
+		$order->item_url=$data['order-url'];
+		$order->article=$data['order-article'];
+		$order->size=$data['order-size'];
+		$order->color=$data['order-color'];
+		$order->amount=$data['order-amount'];
+		$order->price=str_replace(',','.',$data['order-price']);
+		$order->currency=$data['order-currency'];
+		$order->notes=$data['order-notes'];
+		$order->user_id=$this->user->id;
+		$order->site=$matches[1];
+		$order->currency_rate=str_replace(',','.',$data['order-currency-rate']);
+		$order->tax=str_replace(',','.',$data['order-tax']);
+		$order->interest=str_replace(',','.',$data['order-interest']);
+	
+		
+		if ($order->check())
+		{
+			if (!$order->store())
+			{
+				$this->setError($order->getError());
+				return false;
+			}
+		}
+		else
+		{
+			$this->setError($order->getError());
+			return false;
+		}
+		return true;
+	}
+	
+	
+	
+	function getCurrencyRate($currency='USD'){
+		
+		$rate = $this->getTable('Currency');
+		$rate->load($currency);
+		return $rate->rate;
+	}
+	function addPay() {
+	
+		$data = JRequest::get('post');
+		
+		$payment = $this->getTable('Payments');
+		$payment->payment_date=$data['payment_date'];
+		$payment->value=$data['payment-value'];
+		$payment->notes=$data['payment-notes'];
+		$payment->user_id=$this->user->id;
+		if ($payment->check())
+		{
+			if (!$payment->store())
+			{
+				$this->setError($payment->getError());
+				return false;
+			}
+		}
+		else
+		{
+			$this->setError($payment->getError());
+			return false;
+		}
+		return true;
+	}
+	
+	
 }
 ?>

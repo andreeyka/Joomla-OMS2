@@ -17,19 +17,100 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
 
+
 class oms2Controller extends JController
 {
 	/**
 	 * Custom Constructor
 	 */
-
+	
+	
 	function __construct()
 	{
 		parent::__construct();
 	}
 	
-	public function display ($cachable = false, $urlparams = false) {
-		parent::display($cachable, $urlparams);
+	public function display($cachable = false, $urlparams = false)
+	{
+
+		// Get the document object.
+		$woView=array('addOrder','saveorder','addpay','pconfirm');
+		$url_path = JURI::root(true) . '/components/com_oms2/';
+		$document	= JFactory::getDocument();
+		$document->addStyleSheet($url_path . 'assets/css/style.css');
+		// Set the default view name and format from the Request.
+		$vName	 = JRequest::getCmd('view', 'userorders');
+		$vFormat = $document->getType();
+		$lName	 = JRequest::getCmd('layout', 'default');
+		$user = JFactory::getUser();
+		if ($user->get('id') == 0) die('Restricted access');
+		
+		if ( !in_array($vName, $woView)){
+				if ($view = $this->getView($vName, $vFormat)) {
+					// Do any specific processing by view.
+					switch ($vName) {
+						case 'add':
+							$model = $this->getModel('Oms2');
+							break;
+						default:
+							$model = $this->getModel('Oms2');
+							break;
+					}
+			
+					$view->setModel($model, true);
+					$view->setLayout($lName);
+					$view->assignRef('document', $document);
+					$view->display();
+			}
+		}else{
+			switch ($vName){
+				case 'addpay':
+					JRequest::checkToken() or jexit('Invalid Token');
+					$model = $this->getModel('Oms2');
+					if($model->addPay(JRequest::get('post'))){
+						$message = JText::_('SAVE OK');
+					} else {
+						$message = JText::_('SAVE FAILED');
+						$message .= ' ['.$model->getError().']';
+					}
+					$this->setRedirect('index.php?option=com_oms2', $message);
+					break;
+				case 'saveorder':
+					JRequest::checkToken() or jexit('Invalid Token');
+					$model = $this->getModel('Oms2');
+					if($model->saveOrder(JRequest::get('post'))){
+						$message = JText::_('SAVE OK');
+					} else {
+						$message = JText::_('SAVE FAILED');
+						$message .= ' ['.$model->getError().']';
+					}
+					$this->setRedirect('index.php?option=com_oms2&view=order&id='.JRequest::getCmd('id'), $message);
+					break;
+				case 'pconfirm':
+					$model = $this->getModel('Oms2');
+					if($model->paymentConfirm(JRequest::getCmd('id'))){
+						$message = JText::_('Confirm OK');
+					} else {
+						$message = JText::_('Confirm FAILED');
+						$message .= ' ['.$model->getError().']';
+					}
+					$this->setRedirect('index.php?option=com_oms2&view=payments', $message);
+					break;
+					case 'addOrder':
+						JRequest::checkToken() or jexit('Invalid Token');
+						$model = $this->getModel('Oms2');
+						if($model->addOrder(JRequest::get('post'))){
+							$message = JText::_('SAVE OK');
+						} else {
+							$message = JText::_('SAVE FAILED');
+							$message .= ' ['.$model->getError().']';
+						}
+						$this->setRedirect('index.php?option=com_oms2&view=order', $message);
+						break;
+				default:
+					$this->setRedirect('index.php?option=com_oms2', FALSE);
+			}			
+		}
 	}
 
 

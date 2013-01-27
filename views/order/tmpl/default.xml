@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="order Layout">
+		<message>
+			<![CDATA[order Layout]]>
+		</message>
+	</layout>
+	<state>
+		<name>order Layout</name>
+		<description>order Layout</description>
+		<params>
+		</params>
+	</state>
+</metadata>

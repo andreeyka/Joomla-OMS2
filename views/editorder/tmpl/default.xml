@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-	<layout title="oms2 Layout">
+	<layout title="order Layout">
 		<message>
-			<![CDATA[oms2 Layout]]>
+			<![CDATA[order Layout]]>
 		</message>
 	</layout>
 	<state>
-		<name>oms2 Layout</name>
-		<description>oms2 Layout</description>
+		<name>order Layout</name>
+		<description>order Layout</description>
 		<params>
 		</params>
 	</state>
