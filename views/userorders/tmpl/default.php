@@ -16,39 +16,39 @@
 defined('_JEXEC') or die('Restricted access');
 ?>
 <div id="order-container" style="overflow:hidden;">
-	<div id="top-row"  style="overflow:hidden;">
-		<div style="float:left;">Ваш баланс: <?php echo $this->OmsUser->paymentsByStatus[1]-$this->OmsUser->ordersSum;?> руб.</div>
-		<div style="float:left;">
-			<a href="index.php?option=com_oms2&view=payments">
-			<?php 
-			if($this->OmsUser->paymentsByStatus[0] != 0) {
-				echo 'Не потвержденых платежей: '.$this->OmsUser->paymentsByStatus[0].' руб.';
- 			} else {
-				echo 'Платежи';
-			}
-			?>
-			</a>
-		</div>
-		<div style="float:left;"><a href="index.php?option=com_oms2&view=neworder">Внести заказ</a></div>
-		<div style="float:left;"><a href="index.php?option=com_oms2&view=newpay">Внести платеж</a></div>
+	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
+	<div id="table=body" style="overflow:hidden;">
+	<div id="table=body" style="overflow:hidden; float: left; width:100px; height: 300px;">
+		<form action="index.php?option=com_oms2&task=filter" method="post" id="adminForm" name="adminForm">	
+	<?php 
+		
+		echo oms2Helper::getUserSelect('order-filter-user',array('onchange'=>'Joomla.submitbutton(\'filter\')'));
+	?>
+			<input type="hidden" name="option" value="com_oms2" />
+			<input type="hidden" name="task" value="order-filter" />
+			<?php echo JHTML::_('form.token'); ?>
+		</form>
 	</div>
 	<div id="table=body" style="overflow:hidden;">
 <?php 		
 foreach ($this->OmsUser->orders as $key=>$order) {
 	echo "<div id=\"row-order\" style=\"overflow:hidden;\">";
-	$order->time=JHtml::link('index.php?option=com_oms2&view=order&id='.$order->id,substr($order->time, 0,10));
-	$order->item=JHtml::link('index.php?option=com_oms2&view=order&id='.$order->id,$order->item);
+	$order->time=JHtml::link('index.php?option=com_oms2&task=order&id='.$order->id,substr($order->time, 0,10));
+	$order->item=JHtml::link('index.php?option=com_oms2&task=order&id='.$order->id,$order->item);
 	$order->site='<span class="url"> ('.JHtml::link($order->item_url,$order->site,array('target'=>'_blank')).')</span>';
 	$order->status_text=oms2Helper::getStatus($order->status);
 	$this->orders[$key]=$order;
-	echo '<div style="float:left; overflow: hidden; width: 10%;">'.$order->time.'</div>';
-	echo '<div style="float:left; overflow: hidden; width: 40%;">'.$order->item.'</div>';
-	echo '<div style="float:left; overflow: hidden; width: 25%;">'.$order->site.'</div>';
-	echo '<div style="float:left; overflow: hidden; width: 10%;">'.$order->amount.'</div>';
-	echo '<div style="float:left; overflow: hidden; width: 10%;">status'.$order->status.'</div>';
+	echo '<div style="float:left; overflow: hidden; width: 10%; height:15px">'.$order->time.'</div>';
+	echo '<div style="float:left; overflow: hidden; width: 40%; height:15px">'.$order->item.'</div>';
+	echo '<div style="float:left; overflow: hidden; width: 20%; height:15px">'.$order->site.'</div>';
+	$copylink=JHtml::link('index.php?option=com_oms2&task=neworder&id='.$order->id,'Копировать');
+	echo '<div style="float:left; overflow: hidden; width: 10%; height:15px">'.$copylink.'</div>';
+	echo '<div style="float:left; overflow: hidden; width: 5%; height:15px">'.$order->amount.'</div>';
+	echo '<div style="float:left; overflow: hidden; width: 5%; height:15px">status'.$order->status.'</div>';
 	echo '</div>';
 }
  ?>	
+	</div>
 	</div>
 </div>
 

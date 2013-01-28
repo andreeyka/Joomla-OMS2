@@ -20,10 +20,15 @@ $order=$this->Order;
 #oms2Helper::debug($order);
 
 ?>
-<form action="index.php?option=com_oms2&view=addOrder" method="post" name="adminForm" id="adminForm">
+
+
+<form action="index.php?option=com_oms2&task=addOrder" method="post" name="adminForm" id="adminForm">
 <div style="overflow:hidden;" id="order-container">
 	
-    
+
+<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
+
+
     <div style="overflow:hidden;">
     	<div style="float: left; overflow:hidden;">
     		<h3>Наименование</h3>
@@ -61,13 +66,13 @@ $order=$this->Order;
     	</div>
     	
     </div>
-    <div style=""><h3>Комментарий</h3>
+    <div style="overflow:hidden;" id="order-notes">
+    	<h3>Комментарий</h3>
     	<input id="item-form" size="50" name="order-notes" value="<?php echo $order->notes;?>">
     </div>
-    <input id="form-submit" type="submit">
 </div>
+	<input id="form-submit" type="submit">
 	<input type="hidden" name="option" value="com_oms2" />
-	<input type="hidden" name="view" value="addOrder" />
+	<input type="hidden" name="task" value="addOrder" />
 	<?php echo JHTML::_('form.token'); ?>
-
 </form>

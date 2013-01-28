@@ -20,6 +20,7 @@ jimport( 'joomla.application.component.model' );
 class oms2ModelOms2 extends Jmodel
 {
 	private $user;
+	public $update_status=false;
 	
 	function __construct(){
 		$this->user = JFactory::getUser();
@@ -33,67 +34,65 @@ class oms2ModelOms2 extends Jmodel
 		$order->total=round($order->price*$order->amount*(1+$order->tax/100)*(1+$order->interest/100)*$order->currency_rate,2);
 		return $order;
 	}
+	
+	function  getHistory(){
+		$query 	= 'SELECT *'
+				. ' FROM ' . $this->_db->nameQuote('#__ordermanagementsystem_status_history')
+				. ' WHERE `order` = '.JRequest::getCMD('id')
+				. ' ORDER BY date';
+		$this->_db->setQuery($query);
+		return $this->_db->loadObjectList();
+	}
 
-	function paymentConfirm($id)
+	function paymentConfirm()
 	{
-		$payment = $this->getTable('payments');
-		$payment->load($id);
-		$payment->status=1;
-		if ($payment->check())
-		{
-			if (!$payment->store())
-			{
-				$this->setError($payment->getError());
-				return false;
-			}
-		}
-		else
-		{
-			$this->setError($payment->getError());
-			return false;
-		}
-		return true;
+		$id=JRequest::getCmd('id');
+		$this->row = $this->getTable('payments');
+		$this->row->load($id);
+		$this->row->status=1;
+		return $this->save();
 	}
 		
+	function getOmsUser(){
+		$o = new stdclass;
+		$o->user=$this->user;
+		$o->orders=$this->getOrders();
+		$o->ordersSum=round($this->getOrdersCosts(),2);
+		$o->paymentsByStatus=$this->getPaymentsByStatus();
+		return $o;
+	}
+	
 	function getOmsUserOrders(){
-		$omsuser = new oms2User();
-		$omsuser->user=$this->user;
-		$omsuser->orders=$this->getOrdersById($this->user->id);
-		$omsuser->ordersSum=round($this->getOrdersCosts(),2);
-		$omsuser->paymentsByStatus=$this->getPaymentsByStatus();
-		return $omsuser;
+		$o=$this->getOmsUser();
+		$o->orders=$this->getOrders();
+		return $o;
 	}
 	
 	function getOmsUserPayments(){
-		$omsuser = new oms2User();
-		$omsuser->user=$this->user;
-		$omsuser->ordersSum=round($this->getOrdersCosts(),2);
-		$omsuser->paymentsByStatus=$this->getPaymentsByStatus();
-		$omsuser->payments=$this->getPaymentsById($this->user->id);
-		return $omsuser;
+		$o=$this->getOmsUser();
+		$o->payments=$this->getPayments();
+		return $o;
 	}
 	
-	function  getOrdersById($id){
-		$omsuser = new oms2User();
+	function  getOrders(){
 		$query 	= 'SELECT *'
 				. ' FROM ' . $this->_db->nameQuote('#__ordermanagementsystem')
-				. ' WHERE `user_id` = '.$id
+				. ' WHERE `user_id` = '.$this->user->id
 				. ' ORDER BY id';
 		$this->_db->setQuery($query);
 		return $this->_db->loadObjectList();
 	}
 	
-	function getPaymentsById($id){
+	function getPayments(){
 		$query 	= 'SELECT *'
 				. ' FROM ' . $this->_db->nameQuote('#__ordermanagementsystem_payments')
-				. ' WHERE `user_id` = '.$id
+				. ' WHERE `user_id` = '.$this->user->id
 				. ' ORDER BY id';
 		$this->_db->setQuery($query);
 		return $this->_db->loadObjectList();
 	}
 	
 	function getOrdersCosts(){
-		#$user = JFactory::getUser();
 		$query 	= 'SELECT sum(price*amount*(1+tax/100)*(1+interest/100)*currency_rate) as ordersSum'
 				. ' FROM ' . $this->_db->nameQuote('#__ordermanagementsystem')
 				. ' WHERE `user_id` = '.$this->user->id
@@ -101,6 +100,10 @@ class oms2ModelOms2 extends Jmodel
 		$this->_db->setQuery($query);
 		$orders=$this->_db->loadObjectList();
 		return $orders[0]->ordersSum;
+	}
+	
+	function getInsertId(){
+		return $this->_db->insertid();
 	}
 	
 	function getPaymentsByStatus(){
@@ -119,115 +122,100 @@ class oms2ModelOms2 extends Jmodel
 	}
 	
 	function addOrder() {
-		
 		$data = JRequest::get('post');
 		$data['order-site']=preg_replace('/http:\/\/anonymouse.org\/cgi-bin\/anon-www.cgi/', '', $data['order-url']);
 		preg_match('/:\/\/([a-z0-9\.]+)\//i',$data['order-site'],$matches);
-		
-		$order = $this->getTable('Orders');
-		
-		$order->item=$data['order-item'];
-		$order->item_url=$data['order-url'];
-		$order->article=$data['order-article'];
-		$order->size=$data['order-size'];
-		$order->color=$data['order-color'];
-		$order->amount=$data['order-price'];
-		$order->price=str_replace(',','.',$data['order-price']);
-		$order->currency=$data['order-currency'];
-		$order->notes=$data['order-notes'];
-		$order->user_id=$this->user->id;
-		$order->site=$matches[1];
-		$order->currency_rate=str_replace(',','.',$this->getCurrencyRate($order->currency));
-		
-		if ($order->check())
-		{
-			if (!$order->store())
-			{
-				$this->setError($order->getError());
-				return false;
-			}
-		}
-		else
-		{
-			$this->setError($order->getError());
-			return false;
-		}
-		return true;
+		$this->row = $this->getTable('Orders');
+		$this->row->item=$data['order-item'];
+		$this->row->item_url=$data['order-url'];
+		$this->row->article=$data['order-article'];
+		$this->row->size=$data['order-size'];
+		$this->row->color=$data['order-color'];
+		$this->row->amount=$data['order-amount'];
+		$this->row->price=str_replace(',','.',$data['order-price']);
+		$this->row->currency=$data['order-currency'];
+		$this->row->notes=$data['order-notes'];
+		$this->row->user_id=$this->user->id;
+		$this->row->site=$matches[1];
+		$this->row->currency_rate=str_replace(',','.',$this->getCurrencyRate($this->row->currency));
+		return $this->save();
 	}
 	
 	function saveOrder() {
-	
 		$data = JRequest::get('post');
 		$data['order-site']=preg_replace('/http:\/\/anonymouse.org\/cgi-bin\/anon-www.cgi/', '', $data['order-url']);
 		preg_match('/:\/\/([a-z0-9\._-]+)\//i',$data['order-site'],$matches);
-			
-		$order = $this->getTable('Orders');
-		$order->load($data['id']);
+		$this->row = $this->getTable('Orders');
+		$this->row->load($data['id']);
 		
-		$order->item=$data['order-item'];
-		$order->item_url=$data['order-url'];
-		$order->article=$data['order-article'];
-		$order->size=$data['order-size'];
-		$order->color=$data['order-color'];
-		$order->amount=$data['order-amount'];
-		$order->price=str_replace(',','.',$data['order-price']);
-		$order->currency=$data['order-currency'];
-		$order->notes=$data['order-notes'];
-		$order->user_id=$this->user->id;
-		$order->site=$matches[1];
-		$order->currency_rate=str_replace(',','.',$data['order-currency-rate']);
-		$order->tax=str_replace(',','.',$data['order-tax']);
-		$order->interest=str_replace(',','.',$data['order-interest']);
-	
+		if ($this->row->status != $data['order-status']){
+			$this->update_status=true;
+		}
 		
-		if ($order->check())
-		{
-			if (!$order->store())
-			{
-				$this->setError($order->getError());
-				return false;
-			}
-		}
-		else
-		{
-			$this->setError($order->getError());
-			return false;
-		}
-		return true;
+		$this->row->status=$data['order-status'];
+		$this->row->item=$data['order-item'];
+		$this->row->item_url=$data['order-url'];
+		$this->row->article=$data['order-article'];
+		$this->row->size=$data['order-size'];
+		$this->row->color=$data['order-color'];
+		$this->row->amount=$data['order-amount'];
+		$this->row->price=str_replace(',','.',$data['order-price']);
+		$this->row->currency=$data['order-currency'];
+		$this->row->notes=$data['order-notes'];
+		$this->row->user_id=$this->user->id;
+		$this->row->site=$matches[1];
+		$this->row->currency_rate=str_replace(',','.',$data['order-currency-rate']);
+		$this->row->tax=str_replace(',','.',$data['order-tax']);
+		$this->row->interest=str_replace(',','.',$data['order-interest']);
+		return $this->save();
 	}
 	
 	
 	
 	function getCurrencyRate($currency='USD'){
-		
 		$rate = $this->getTable('Currency');
 		$rate->load($currency);
 		return $rate->rate;
 	}
-	function addPay() {
 	
+	
+	function addPay() {
 		$data = JRequest::get('post');
-		
-		$payment = $this->getTable('Payments');
-		$payment->payment_date=$data['payment_date'];
-		$payment->value=$data['payment-value'];
-		$payment->notes=$data['payment-notes'];
-		$payment->user_id=$this->user->id;
-		if ($payment->check())
+		$this->row = $this->getTable('Payments');
+		$this->row->payment_date=$data['payment_date'];
+		$this->row->value=$data['payment-value'];
+		$this->row->notes=$data['payment-notes'];
+		$this->row->user_id=$this->user->id;
+		return $this->save();
+	}
+	
+	function save(){
+		if ($this->row->check())
 		{
-			if (!$payment->store())
+			if (!$this->row->store())
 			{
-				$this->setError($payment->getError());
-				return false;
+				$this->setError($this->row->getError());
+				return JText::_('SAVE FAILED');
 			}
 		}
 		else
 		{
-			$this->setError($payment->getError());
-			return false;
+			$this->setError($this->row->getError());
+			return JText::_('SAVE FAILED');
 		}
-		return true;
+		return JText::_('SAVE OK');
 	}
+	
+	
+	function addHistory($id,$status=FALSE) {
+		$this->row = $this->getTable('History');
+		if ($status) $this->row->status=$status;
+		$this->row->order=$id;
+		return $this->save();
+	}
+	
+	
+	
 	
 	
 }

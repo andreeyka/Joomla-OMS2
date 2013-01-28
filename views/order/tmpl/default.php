@@ -17,18 +17,19 @@ defined('_JEXEC') or die('Restricted access');
 
 // Your custom code here
 $order=$this->Order;
-#oms2Helper::debug($order);
-
+$History=$this->History;
 ?>
 
 <div style="overflow:hidden;" id="order-container">
-	
+
+	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
+
     <div style="background: #fd0">
     	<div style="float:left; width:40%;"><?php echo $order->time;?></div>
     	<div style="float:left; width:40%;"><?php echo $order->site;?></div>
     	<div style="overflow:hidden;">
     		<?php echo JHtml::link($order->item_url,'Ссылка',array('target'=>'_blank'));?>
-    		<?php echo JHtml::link("index.php?option=com_oms2&view=editorder&id=".$order->id,'Изменить');?>
+    		<?php echo JHtml::link("index.php?option=com_oms2&task=editorder&id=".$order->id,'Изменить');?>
     	</div>
     </div>
     <div style=""><h1><?php echo $order->item;?></h1></div>
@@ -54,4 +55,18 @@ $order=$this->Order;
     </div>
     <div style="">Комментарий</div>
     <div style=""><h3><?php echo $order->notes;?></h3></div>
+</div>
+<div style="overflow:hidden;" id="history-container">
+<?php 
+foreach ($History as $event){
+	?>
+	<div style="overflow:hidden;" id="history-row">
+		<div style="overflow:hidden; float: left;" id="history-event-date">
+		<?php echo $event->date;?>
+		</div> 
+		<div style="overflow:hidden; float: left;" id="history-event-date">
+		Изменен статус. Текущий статус: <?php echo $event->status;?>
+		</div>
+	</div>	
+<?php }?>
 </div>

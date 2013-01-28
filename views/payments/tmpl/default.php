@@ -16,20 +16,9 @@
 defined('_JEXEC') or die('Restricted access');
 ?>
 <div id="order-container" style="overflow:hidden;">
-	<div id="top-row"  style="overflow:hidden;">
-		<div style="float:left;">Ваш баланс: <?php echo $this->OmsUser->paymentsByStatus[1]-$this->OmsUser->ordersSum;?> руб.</div>
-			<?php 
-			if($this->OmsUser->paymentsByStatus[0] != 0) {
-				echo '<div style="float:left;">';
-				echo 'Не потвержденых платежей: '.$this->OmsUser->paymentsByStatus[0].' руб.';
-				echo '</div>';
- 			}
- 			?>
-		<div style="float:left;"><a href="index.php?option=com_oms2&view=userorders">Заказы</a></div>
-		<div style="float:left;"><a href="index.php?option=com_oms2&view=neworder">Внести заказ</a></div>
-		<div style="float:left;"><a href="index.php?option=com_oms2&view=newpay">Внести платеж</a></div>
-	</div>
-	<div id="table=body" style="overflow:hidden;">
+	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
+	
+	<div id="order-tablebody" style="overflow:hidden;">
 <?php 		
 foreach ($this->OmsUser->payments as $key=>$payment) {
 	echo "<div id=\"row-order\" style=\"overflow:hidden;\">";
@@ -38,7 +27,7 @@ foreach ($this->OmsUser->payments as $key=>$payment) {
 	echo "<div style=\"float:left; overflow: hidden; width: 24%;\">".$payment->notes."</div>";
 	echo "<div style=\"float:left; overflow: hidden; width: 24%;\">".$payment->status;
 	if ($payment->status != 1){
-		echo '<a href="index.php?option=com_oms2&view=pconfirm&id='.$payment->id.'">Подтвердить	</a>';
+		echo '<a href="index.php?option=com_oms2&task=pconfirm&id='.$payment->id.'">Подтвердить	</a>';
 	}
 	echo "</div></div>";
 }

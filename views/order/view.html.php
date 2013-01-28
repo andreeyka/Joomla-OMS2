@@ -21,7 +21,11 @@ class oms2Vieworder extends Jview
 {
 	function display($tpl = null){
 		
-		
+		$session = JFactory::getSession();
+		$this->orderFilter=$session->get('orderFilter');
+		oms2Helper::debug($this->orderFilter);
+		$this->assign('OmsUser', $this->get('OmsUser'));
+		$this->assign('History', $this->get('History'));
 		$this->assign('Order', $this->get('Order'));
  		parent::display($tpl);
 	}

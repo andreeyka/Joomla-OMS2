@@ -17,21 +17,26 @@ defined('_JEXEC') or die('Restricted access');
 
 // Your custom code here
 $order=$this->Order;
-#oms2Helper::debug($order);
+
 
 ?>
-<form action="index.php?option=com_oms2&view=saveorder&id=<?php echo $order->id;?>" method="post" name="adminForm" id="adminForm">
+<form action="index.php?option=com_oms2&task=saveorder&id=<?php echo $order->id;?>" method="post" name="adminForm" id="adminForm">
+
 <div style="overflow:hidden;" id="order-container">
-	
+	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
     
     <div style="overflow:hidden;">
     	<div style="float: left; overflow:hidden;">
     		<h3>Наименование</h3>
-    		<input id="order-item" size="50" name="order-item" value="<?php echo $order->item;?>">
+    		<input id="order-item" size="40" name="order-item" value="<?php echo $order->item;?>">
     	</div>
     	<div style="float: left; overflow:hidden;">
     		<h3>Ссылка</h3>
-    		<input id="order-url" size="50" name="order-url" value="<?php echo $order->item_url;?>">
+    		<input id="order-url" size="40" name="order-url" value="<?php echo $order->item_url;?>">
+    	</div>
+    	<div style="float: left; overflow:hidden;">
+    		<h3>Статус</h3>
+    		<?php echo oms2Helper::getStatusSelect('order-status',$order->status);?>
     	</div>
     </div>
     <div style="overflow:hidden;">
@@ -79,7 +84,7 @@ $order=$this->Order;
 </div>
 	<input type="hidden" name="option" value="com_oms2" />
 	<input type="hidden" name="id" value="<?php echo $order->id;?>" />
-	<input type="hidden" name="view" value="saveorder" />
+	<input type="hidden" name="task" value="saveorder" />
 	<?php echo JHTML::_('form.token'); ?>
 
 </form>

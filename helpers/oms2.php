@@ -21,83 +21,45 @@ jimport('joomla.application.component.helper');
 jimport('joomla.html.grid');
 
 
-
-class oms2HtmlTable  extends JGrid {
-	
-	public  $allow_columns=false;
-	
-	function addTable($param,$options=false) {
-		$id=0;
-		if(is_array($this->allow_columns)) {
-			$this->columns=$this->allow_columns;
-		}else{
-			$this->columns=array_keys(get_object_vars($param[0]));
-		}
-		foreach ($param as $row) {
-			$this->rows[$id]['_row']=array(	'class'=>'row'.($id % 2).' order_status'.$row->status,
-											'id'=>'order_'.$row->id);
-			foreach ($row as $name=>$value) {
-				if (!$this->allow_columns or in_array($name, $this->allow_columns)){
-					$cell=new stdClass();
-					$cell->options=array('class'=>'cell');
-					$cell->content=$value;
-					$this->rows[$id][$name]=$cell;
-				}
-			}
-			$this->activeRow=$id++;
-		}
-		if(is_int($options['header'])){
-			$this->specialRows['header']=array($options['header']=>$options['header']);
-		}
-		if(is_int($options['footer'])){
-			if($options['footer']=-1) $options["footer"]=$this->activeRow;
-			$this->specialRows['footer']=array($options['footer']=>$options['footer']);
-		}
-	}
-	
-}
-
 class oms2Helper
 {
 	// Your custom code here
-	static  $allowed_status=[1,2,3,4,5];
+	static  $allowed_status=[0,1,2,3,4,5];
 	
-	static public function user_name ($id=null) {
+	static function user_name ($id=null) {
 		$user = JFactory::getUser();
 	}
 	
-	static public function getStatus($status){
+	static function getStatus($status){
 		if (in_array($status, self::$allowed_status)) {
 			return JText::_('OMS STATUS'.$status);
 		}
 	}
 	
-	static public function getAllStatus(){
+	static function getAllStatus(){
 		foreach (self::$allowed_status as $key) {
 			$allStatus[$key]=self::getStatus($key);
 		}
 		return $allStatus;
 	}
 	
-	static public function debug($param) {
+	static function getUserSelect($name,$options=FALSE,$key='value',$value='text',$default=FALSE) {
+		$query = 'SELECT id AS value, username AS text FROM #__users order by username asc';
+		$b=JHTML::_('list.genericordering',$query);
+		return  JHTML::_('select.genericlist',$b,$name,$options,$key,$value,$default);
+	}	
+	static function debug($param) {
 			echo "<pre>";
 			print_r($param);
 			echo "</pre>";
 			die();;
 	}
-}
-
-class oms2User {
-	public $id;
-	protected $name;
-	public $orders;
-	function __construct($id=FALSE){
-		$user = JFactory::getUser();
-		$this->id=$user->get('id');
-		$this->name=$user->get('name');
-		$this->username=$user->get('username');
+	
+	static function getStatusSelect($name,$default=FALSE,$options=FALSE){
+		return JHTML::_('select.genericlist', self::getAllStatus(), $name, $options, False, False, $default);
 	}
 }
+
 
 
 

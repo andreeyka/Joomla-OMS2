@@ -8,6 +8,17 @@
 	text-align: inherit;
 	
 }
+
+#history-container div {
+	border: 1px solid gray;
+	margin: 1px;
+	padding: 1px;
+	border-radius: 1px;
+	text-align: center;
+	text-align: inherit;
+	
+}
+
 #order-container ul {
 	vertical-align: top;
 }

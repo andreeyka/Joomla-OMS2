@@ -20,6 +20,10 @@ jimport( 'joomla.application.component.view' );
 class oms2ViewUserorders extends Jview
 {
 	function display($tpl = null){
+		$session = JFactory::getSession();
+		#$session::checkToken() or jexit('Invalid Token');
+			
+		$this->orderFilter=$session->get('orderFilter');
 		$this->assign('OmsUser', $this->get('OmsUserOrders'));
 		parent::display($tpl);
 	}

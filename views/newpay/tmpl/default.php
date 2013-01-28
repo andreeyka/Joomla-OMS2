@@ -18,9 +18,12 @@ defined('_JEXEC') or die('Restricted access');
 // Your custom code here
 
 ?>
-<form action="index.php?option=com_oms2&view=addpay" method="post" name="adminForm" id="adminForm">
+<form action="index.php?option=com_oms2&task=addpay" method="post" name="adminForm" id="adminForm">
 <div style="overflow:hidden;" id="order-container">
-    	<div style="float: left; overflow:hidden;" id="payment-date">
+	
+	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
+
+	<div style="float: left; overflow:hidden;" id="payment-date">
     		<h3>Дата платежа</h3>
 <?php 
 echo JHTML::calendar(date('Y-m-d'),'payment_date','payment_date','%Y-%m-%d');
@@ -38,7 +41,7 @@ echo JHTML::calendar(date('Y-m-d'),'payment_date','payment_date','%Y-%m-%d');
     </div>
     <input id="form-submit" type="submit">
 	<input type="hidden" name="option" value="com_oms2" />
-	<input type="hidden" name="view" value="addpay" />
+	<input type="hidden" name="task" value="addpay" />
 	<?php echo JHTML::_('form.token'); ?>
 
 </form>

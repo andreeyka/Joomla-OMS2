@@ -32,18 +32,24 @@ class oms2Controller extends JController
 	
 	public function display($cachable = false, $urlparams = false)
 	{
-
-		// Get the document object.
-		$woView=array('addOrder','saveorder','addpay','pconfirm');
-		$url_path = JURI::root(true) . '/components/com_oms2/';
+		
+		$woView=array('addOrder','saveorder','addpay','pconfirm','filter');
+		$adminGroup='9';
+		
 		$document	= JFactory::getDocument();
-		$document->addStyleSheet($url_path . 'assets/css/style.css');
-		// Set the default view name and format from the Request.
-		$vName	 = JRequest::getCmd('view', 'userorders');
+		$document->addStyleSheet(JURI::root(true) . '/components/com_oms2/assets/css/style.css');
+		
+		$session = JFactory::getSession();
+		
+		$vName	 = JRequest::getCmd('task', 'userorders');
 		$vFormat = $document->getType();
 		$lName	 = JRequest::getCmd('layout', 'default');
+		
+		
 		$user = JFactory::getUser();
 		if ($user->get('id') == 0) die('Restricted access');
+		if (in_array($adminGroup, array_keys($user->groups))) $admin = true;
+		#oms2Helper::debug(array_keys($user->groups));
 		
 		if ( !in_array($vName, $woView)){
 				if ($view = $this->getView($vName, $vFormat)) {
@@ -64,49 +70,53 @@ class oms2Controller extends JController
 			}
 		}else{
 			switch ($vName){
+				case 'filter':
+					JRequest::checkToken() or jexit('Invalid Token');
+					$model = $this->getModel('Oms2');
+					foreach (JRequest::get('POST') as $key => $value) {
+						if (strpos($key, 'order-filter') === 0){
+							$orderFilter[$key]=$value;
+						} 
+					}
+					
+					$session->set('orderFilter',$orderFilter);
+					$this->setRedirect('index.php?option=com_oms2', 'FILTER SET');
+					break;
 				case 'addpay':
 					JRequest::checkToken() or jexit('Invalid Token');
 					$model = $this->getModel('Oms2');
-					if($model->addPay(JRequest::get('post'))){
-						$message = JText::_('SAVE OK');
-					} else {
-						$message = JText::_('SAVE FAILED');
-						$message .= ' ['.$model->getError().']';
-					}
+					$message = $model->addPay();
 					$this->setRedirect('index.php?option=com_oms2', $message);
 					break;
 				case 'saveorder':
+					if (!$admin){
+						$this->setRedirect('index.php?option=com_oms2', 'Not allowed');
+						break;
+					}
 					JRequest::checkToken() or jexit('Invalid Token');
 					$model = $this->getModel('Oms2');
-					if($model->saveOrder(JRequest::get('post'))){
-						$message = JText::_('SAVE OK');
-					} else {
-						$message = JText::_('SAVE FAILED');
-						$message .= ' ['.$model->getError().']';
-					}
+					$message= $model->saveOrder();
+					if($model->update_status) $message.= '. History - '.$model->addHistory(JRequest::getCmd('id'),JRequest::getCmd('order-status'));
 					$this->setRedirect('index.php?option=com_oms2&view=order&id='.JRequest::getCmd('id'), $message);
 					break;
 				case 'pconfirm':
-					$model = $this->getModel('Oms2');
-					if($model->paymentConfirm(JRequest::getCmd('id'))){
-						$message = JText::_('Confirm OK');
-					} else {
-						$message = JText::_('Confirm FAILED');
-						$message .= ' ['.$model->getError().']';
+					if (!$admin){
+						$this->setRedirect('index.php?option=com_oms2', 'Not allowed');
+						break;
 					}
+					$model = $this->getModel('Oms2');
+					$message=$model->paymentConfirm();
 					$this->setRedirect('index.php?option=com_oms2&view=payments', $message);
 					break;
-					case 'addOrder':
-						JRequest::checkToken() or jexit('Invalid Token');
-						$model = $this->getModel('Oms2');
-						if($model->addOrder(JRequest::get('post'))){
-							$message = JText::_('SAVE OK');
-						} else {
-							$message = JText::_('SAVE FAILED');
-							$message .= ' ['.$model->getError().']';
-						}
-						$this->setRedirect('index.php?option=com_oms2&view=order', $message);
-						break;
+				case 'addOrder':
+					JRequest::checkToken() or jexit('Invalid Token');
+					$model = $this->getModel('Oms2');
+					$message=$model->addOrder(JRequest::get('post'));
+					$insertId=$model->getInsertId();
+					$message.='. History - '.$model->addHistory($insertId);
+					$this->setRedirect('index.php?option=com_oms2&view=order&id='.$insertId, $message);
+					
+					break;
 				default:
 					$this->setRedirect('index.php?option=com_oms2', FALSE);
 			}			
