@@ -18,7 +18,7 @@
 			?>
 			</a>
 		</div>
-		
+		<div  id="oms-menu-newpayment"  class="cell"><a href="index.php?option=com_oms2&task=deliverys">Доставки</a></div>
 		<div  id="oms-menu-neworder"  class="cell"><a href="index.php?option=com_oms2&task=neworder">Внести заказ</a></div>
 		<div  id="oms-menu-newpayment"  class="cell"><a href="index.php?option=com_oms2&task=newpay">Внести платеж</a></div>
 		<div class="clear"></div>

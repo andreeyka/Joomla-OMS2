@@ -17,11 +17,11 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport( 'joomla.application.component.view' );
 
-class oms2ViewUserorders extends Jview
+class oms2ViewDeliverys extends Jview
 {
 	function display($tpl = null){
 		$this->assign('orderFilter', $this->get('OrderFilter'));
-		$this->assign('OmsUser', $this->get('OmsUserOrders'));
+		$this->assign('OmsUser', $this->get('OmsUserDeliverys'));
 		parent::display($tpl);
 	}
 

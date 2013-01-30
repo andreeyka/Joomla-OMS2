@@ -63,7 +63,7 @@ class oms2ModelOms2 extends Jmodel
 		$query->select('*');
 		$query->from($this->_db->nameQuote('#__ordermanagementsystem'));
 		$query->where($this->getSqlWhere());
-		$query->order('id');
+		$query->order('id desc');
 		$this->_db->setQuery($query);
 		return $this->_db->loadObjectList();
 	}
@@ -206,6 +206,7 @@ class oms2ModelOms2 extends Jmodel
 			$messageHistory=$this->updateHistory();
 			if($this->row->status==4){
 				$this->row->delivery=date('Y-m-d');
+				oms2Helper::debug($this->row);
 				$this->addDelivery();
 			}
 		}
@@ -250,7 +251,7 @@ class oms2ModelOms2 extends Jmodel
 	function getOmsUser(){
 		$o = new stdclass;
 		$o->user=$this->user;
-		$o->orders=$this->getOrders();
+		#$o->orders=$this->getOrders(); Удалить потом
 		$o->ordersSum=round($this->getOrdersCosts(),2);
 		$o->paymentsByStatus=$this->getPaymentsByStatus();
 		return $o;
@@ -262,10 +263,44 @@ class oms2ModelOms2 extends Jmodel
 		return $o;
 	}
 	
+	function getOmsUserDeliverys(){
+		$o=$this->getOmsUser();
+		$o->deliverys=$this->getDeliverys();
+		oms2Helper::debug($o);
+		return $o;
+	}
+	
 	function getOmsUserPayments(){
 		$o=$this->getOmsUser();
 		$o->payments=$this->getPayments();
 		return $o;
+	}
+	
+	function getDeliverys() {
+		/*
+		 * SELECT a.user_id, a.date, COUNT( * ) 
+			FROM  `wa79x_ordermanagementsystem_delivery` AS a, wa79x_ordermanagementsystem AS b
+			WHERE a.user_id = b.user_id
+			AND b.status =4
+			GROUP BY a.user_id, a.date
+			ORDER BY b.user_id, a.date
+			LIMIT 0 , 30
+		 */
+		
+		
+		$query = $this->_db->getQuery(true);
+		$a=$this->_db->nameQuote('#__ordermanagementsystem_delivery');
+		$b=$this->_db->nameQuote('#__ordermanagementsystem');
+		$query->select("$a.date, $a.user_id, COUNT( * ) as count");
+		$query->from($a);
+		$query->from($b);
+		$query->where("$a.user_id = $b.user_id");
+		$query->where("$b.status = 4");
+		$query->group("$a.date, $a.user_id");
+		$query->order("$a.date desc, $a.user_id");
+		$this->_db->setQuery($query);
+		$this->_db->query($query);
+		return $this->_db->loadObjectList();
 	}
 	
 	function addDelivery(){
@@ -340,7 +375,7 @@ class oms2ModelOms2 extends Jmodel
 		$where[]='('.implode(' OR ', $status).')';
 		if($this->orderFilter['order-filter-date']!='') $where[]="`time` like '%".$this->orderFilter['order-filter-date']."%'";
 		return $where;
-	}
+	}	
 	
 	function getInsertId(){
 		return $this->_db->insertid();

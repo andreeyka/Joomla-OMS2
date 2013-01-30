@@ -13,6 +13,7 @@
  */
 
 // no direct access
+
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
@@ -36,11 +37,10 @@ class oms2Controller extends JController
 		$woView=array('addOrder','saveorder','addpay','pconfirm','filter', 'deleteorder','setstatus');
 		$adminGroup='9';
 		
-		$document	= JFactory::getDocument();
+		$document = JFactory::getDocument();
 		$document->addStyleSheet(JURI::root(true) . '/components/com_oms2/assets/css/style.css');
 		$document->addStyleSheet("http://fonts.googleapis.com/css?family=Scada&subset=latin,cyrillic");
 		$session = JFactory::getSession();
-		
 		$vName	 = JRequest::getCmd('task', 'userorders');
 		$vFormat = $document->getType();
 		$lName	 = JRequest::getCmd('layout', 'default');

@@ -55,7 +55,7 @@ div#oms-menu-row
 	padding: 0px;
 }
 #oms-menu-row div	{
-	width: 20%
+	padding-left: 25px; 
 }
 #row-order
 {
