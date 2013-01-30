@@ -20,7 +20,9 @@ class TableOrders extends JTable
 	public $tax = 0;
 	public $weight = null;
 	public $notes = null;
-	public $status = 0;
+	public $status = 1;
+	public $image = null;
+	public $delivery = null;
 
 
 

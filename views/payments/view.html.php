@@ -20,6 +20,7 @@ jimport( 'joomla.application.component.view' );
 class oms2ViewPayments extends Jview
 {
 	function display($tpl = null){
+		$this->assign('orderFilter', $this->get('OrderFilter'));
 		$this->assign('OmsUser', $this->get('OmsUserPayments'));
 		parent::display($tpl);
 	}

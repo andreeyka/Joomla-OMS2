@@ -5,7 +5,7 @@ class TableHistory extends JTable
 {
 	public $id = null;
 	public $order = null;
-	public $status = null;
+	public $status = 1;
 	public $date = null;
 
 	function __construct(&$db)

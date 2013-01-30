@@ -20,7 +20,7 @@ $order=$this->Order;
 
 
 ?>
-<form action="index.php?option=com_oms2&task=saveorder&id=<?php echo $order->id;?>" method="post" name="adminForm" id="adminForm">
+<form action="index.php?option=com_oms2&task=saveorder&id=<?php echo $order->id;?>" method="post" name="adminForm" id="adminForm"  enctype="multipart/form-data" >
 
 <div style="overflow:hidden;" id="order-container">
 	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
@@ -36,7 +36,7 @@ $order=$this->Order;
     	</div>
     	<div style="float: left; overflow:hidden;">
     		<h3>Статус</h3>
-    		<?php echo oms2Helper::getStatusSelect('order-status',$order->status);?>
+    		<?php echo oms2Helper::getStatusSelect('order-status',$order->status,$order->status);?>
     	</div>
     </div>
     <div style="overflow:hidden;">
@@ -77,8 +77,15 @@ $order=$this->Order;
     		<input id="order-interest" name="order-interest" size="5" value="<?php echo $order->interest;?>">
     	</div>
     </div>
-    <div style=""><h3>Комментарий</h3>
-    	<input id="item-form" size="50" name="order-notes" value="<?php echo $order->notes;?>">
+    
+    <div id="row-order-notes"><h3>Комментарий</h3>
+    	<input id="order-notes" size="50" name="order-notes" value="<?php echo $order->notes;?>">
+    </div>
+    <div id="row-order-image">
+    	<h3>Фото</h3>
+    	<div class="cell"><?php echo $order->image;?></div>
+    	<div class="cell"><input id="order-image" size="50" name="order-image" type="file" ></div> 
+    	
     </div>
     <input id="form-submit" type="submit">
 </div>

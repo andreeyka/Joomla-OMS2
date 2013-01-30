@@ -18,7 +18,7 @@ defined('_JEXEC') or die('Restricted access');
 ?>
 <script type="text/javascript">
 <!--
-	function vavalidateFormlidateForm( frm ) {
+	function validateForm( frm ) {
 		var valid = document.formvalidator.isValid(frm);
 		if (valid == false) {
 			// do field validation

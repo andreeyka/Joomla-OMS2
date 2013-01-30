@@ -19,19 +19,35 @@ defined('_JEXEC') or die('Restricted access');
 	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
 	
 	<div id="order-tablebody" style="overflow:hidden;">
+	<div id="table=body" style="overflow:hidden; float: left; width:100px; height: 300px;">
+		<form action="index.php?option=com_oms2&task=filter" method="post" id="adminForm" name="adminForm">	
+	<?php 
+		
+		echo oms2Helper::getUserSelect('oms-user',array('onchange'=>'Joomla.submitbutton(\'filter\')'),$this->orderFilter['oms-user']);
+	?>
+			<input type="hidden" name="option" value="com_oms2" />
+			<input type="hidden" name="task" value="order-filter" />
+			<?php echo JHTML::_('form.token'); ?>
+		</form>
+	</div>
+	<div id="table=body" style="overflow:hidden;">
 <?php 		
 foreach ($this->OmsUser->payments as $key=>$payment) {
-	echo "<div id=\"row-order\" style=\"overflow:hidden;\">";
-	echo "<div style=\"float:left; overflow: hidden; width: 24%;\">".$payment->payment_date."</div>";
-	echo "<div style=\"float:left; overflow: hidden; width: 24%;\">".$payment->value."</div>";
-	echo "<div style=\"float:left; overflow: hidden; width: 24%;\">".$payment->notes."</div>";
-	echo "<div style=\"float:left; overflow: hidden; width: 24%;\">".$payment->status;
+	?>
+	<div id="row-order" style="overflow:hidden;">
+	<div style="float:left; overflow: hidden; width: 24%;"><?php echo $payment->payment_date;?></div>
+	<div style="float:left; overflow: hidden; width: 24%;"><?php echo $payment->value;?></div>
+	<div style="float:left; overflow: hidden; width: 24%;"><?php echo $payment->notes;?></div>
+	<div style="float:left; overflow: hidden; width: 23%;"><?php echo $payment->status;
 	if ($payment->status != 1){
 		echo '<a href="index.php?option=com_oms2&task=pconfirm&id='.$payment->id.'">Подтвердить	</a>';
 	}
-	echo "</div></div>";
+	?>
+	</div>
+</div>
+<?php 
 }
  ?>	
 	</div>
 </div>
-
+</div>

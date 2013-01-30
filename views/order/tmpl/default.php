@@ -34,7 +34,10 @@ $History=$this->History;
     </div>
     <div style=""><h1><?php echo $order->item;?></h1></div>
     <div style="height=300px;overflow:hidden;">
-    	<div style="float:left; width:15%; height:100px;">Фото</div>
+    	<div style="float:left; width:15%; height:100px;">
+    		<?php if($order->image=='') $order->image='noimage.jpg';?>
+    		<a rel="rokbox" href="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>"><img alt="Фото" width=100 height=100 src="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>"></a>
+    	</div>
     	<div style="float:left; width:33%; height:100px;">
     		<ul>
     			<li>Артикул: <?php echo $order->article;?></li>

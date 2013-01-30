@@ -16,32 +16,29 @@
 defined('_JEXEC') or die('Restricted access');
 
 // Your custom code here
-
 ?>
+
+<div style="overflow:hidden;" id="payment-container">
 <form action="index.php?option=com_oms2&task=addpay" method="post" name="adminForm" id="adminForm">
-<div style="overflow:hidden;" id="order-container">
-	
 	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
-
-	<div style="float: left; overflow:hidden;" id="payment-date">
+	<div class="cell" id="payment-date">
     		<h3>Дата платежа</h3>
-<?php 
-echo JHTML::calendar(date('Y-m-d'),'payment_date','payment_date','%Y-%m-%d');
-?>
-    	</div>
-    	<div style="float: left; overflow:hidden;" id="payment-value">
+			<?php 
+				echo JHTML::calendar(date('Y-m-d'),'payment_date','payment_date','%Y-%m-%d');
+			?>
+    </div>
+    <div class="cell" id="payment-value">
     		<h3>Сумма</h3>
     		<input id="payment-value" name="payment-value">
-    	</div>
-    
-    	<div id="paymeny-notes">
+    </div>
+    <div class="cell" id="paymeny-notes">
     		<h3>Комментарий</h3>
     		<input id="payment-notes" size="50" name="payment-notes">
-    	</div>
     </div>
     <input id="form-submit" type="submit">
 	<input type="hidden" name="option" value="com_oms2" />
 	<input type="hidden" name="task" value="addpay" />
 	<?php echo JHTML::_('form.token'); ?>
+    </form>
+</div>
 
-</form>

@@ -20,7 +20,6 @@ jimport( 'joomla.application.component.view' );
 class oms2Viewneworder extends Jview
 {
 	function display($tpl = null){
-		
 		$this->assign('OmsUser', $this->get('OmsUser'));
 		$this->assign('Order', $this->get('Order'));
 		parent::display($tpl);

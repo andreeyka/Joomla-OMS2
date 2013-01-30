@@ -17,17 +17,15 @@ defined('_JEXEC') or die('Restricted access');
 
 // Your custom code here
 $order=$this->Order;
-#oms2Helper::debug($order);
 
 ?>
 
 
-<form action="index.php?option=com_oms2&task=addOrder" method="post" name="adminForm" id="adminForm">
-<div style="overflow:hidden;" id="order-container">
+<form action="index.php?option=com_oms2&task=addOrder" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data" >
+<div style="overflow:hidden;" id="order-container" >
 	
 
 <?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
-
 
     <div style="overflow:hidden;">
     	<div style="float: left; overflow:hidden;">
@@ -62,13 +60,17 @@ $order=$this->Order;
     	</div>
     	<div style="float:left;">
     		<h3>Валюта</h3>
-    		<input id="order-currecy" name="order-currency" size="5" value="<?php echo $order->currency;?>">
+    		<?php echo oms2Helper::getCurrencySelect("order-currency",$order->currency);?>
     	</div>
     	
     </div>
     <div style="overflow:hidden;" id="order-notes">
     	<h3>Комментарий</h3>
     	<input id="item-form" size="50" name="order-notes" value="<?php echo $order->notes;?>">
+    </div>
+    <div style="overflow:hidden;" id="order-notes">
+    	<h3>Image</h3>
+    	<?php echo $order->image;?> <input id="photo-image" size="50" name="order-image" type="file" >
     </div>
 </div>
 	<input id="form-submit" type="submit">

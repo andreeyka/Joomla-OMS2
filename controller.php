@@ -33,12 +33,12 @@ class oms2Controller extends JController
 	public function display($cachable = false, $urlparams = false)
 	{
 		
-		$woView=array('addOrder','saveorder','addpay','pconfirm','filter');
+		$woView=array('addOrder','saveorder','addpay','pconfirm','filter', 'deleteorder','setstatus');
 		$adminGroup='9';
 		
 		$document	= JFactory::getDocument();
 		$document->addStyleSheet(JURI::root(true) . '/components/com_oms2/assets/css/style.css');
-		
+		$document->addStyleSheet("http://fonts.googleapis.com/css?family=Scada&subset=latin,cyrillic");
 		$session = JFactory::getSession();
 		
 		$vName	 = JRequest::getCmd('task', 'userorders');
@@ -47,22 +47,21 @@ class oms2Controller extends JController
 		
 		
 		$user = JFactory::getUser();
-		if ($user->get('id') == 0) die('Restricted access');
-		if (in_array($adminGroup, array_keys($user->groups))) $admin = true;
-		#oms2Helper::debug(array_keys($user->groups));
+		
+		if ($user->get('id') == 0) {
+			$this->setRedirect('index.php', 'Not allowed');
+			return;
+		}
+		if (in_array($adminGroup, array_keys($user->groups))) $user->omsadmin = true;
+		
+		$model = $this->getModel('Oms2');
+		
+		
 		
 		if ( !in_array($vName, $woView)){
 				if ($view = $this->getView($vName, $vFormat)) {
 					// Do any specific processing by view.
-					switch ($vName) {
-						case 'add':
-							$model = $this->getModel('Oms2');
-							break;
-						default:
-							$model = $this->getModel('Oms2');
-							break;
-					}
-			
+					$model->admin=$user->omsadmin;
 					$view->setModel($model, true);
 					$view->setLayout($lName);
 					$view->assignRef('document', $document);
@@ -72,59 +71,66 @@ class oms2Controller extends JController
 			switch ($vName){
 				case 'filter':
 					JRequest::checkToken() or jexit('Invalid Token');
-					$model = $this->getModel('Oms2');
-					foreach (JRequest::get('POST') as $key => $value) {
-						if (strpos($key, 'order-filter') === 0){
+					$postData=JRequest::get('POST');
+					foreach ($postData as $key => $value) {
+						if (strpos($key, 'order-filter') === 0 or $key=='oms-user'){
 							$orderFilter[$key]=$value;
 						} 
 					}
-					
+					$sessionData = $session->get('orderFilter');
+					if(!isset($postData['order-filter-status']) and isset($sessionData['order-filter-status'])) {
+						$orderFilter['order-filter-status']=$sessionData['order-filter-status'];
+					}
+					if(!isset($postData['order-filter-status']) and !isset($sessionData['order-filter-status'])) {
+						$orderFilter['order-filter-status']=array(1,1);
+					}
 					$session->set('orderFilter',$orderFilter);
 					$this->setRedirect('index.php?option=com_oms2', 'FILTER SET');
 					break;
 				case 'addpay':
 					JRequest::checkToken() or jexit('Invalid Token');
-					$model = $this->getModel('Oms2');
 					$message = $model->addPay();
 					$this->setRedirect('index.php?option=com_oms2', $message);
 					break;
+				case 'deleteorder':
+						if (!$user->omsadmin){
+							$this->setRedirect('index.php?option=com_oms2', 'Not allowed');
+							break;
+						}
+						$message= $model->deleteOrder();
+						$this->setRedirect('index.php?option=com_oms2', $message);
+						break;
 				case 'saveorder':
-					if (!$admin){
+					if (!$user->omsadmin){
 						$this->setRedirect('index.php?option=com_oms2', 'Not allowed');
 						break;
 					}
 					JRequest::checkToken() or jexit('Invalid Token');
-					$model = $this->getModel('Oms2');
 					$message= $model->saveOrder();
-					if($model->update_status) $message.= '. History - '.$model->addHistory(JRequest::getCmd('id'),JRequest::getCmd('order-status'));
 					$this->setRedirect('index.php?option=com_oms2&view=order&id='.JRequest::getCmd('id'), $message);
 					break;
 				case 'pconfirm':
-					if (!$admin){
+					if (!$user->omsadmin){
 						$this->setRedirect('index.php?option=com_oms2', 'Not allowed');
 						break;
 					}
-					$model = $this->getModel('Oms2');
 					$message=$model->paymentConfirm();
 					$this->setRedirect('index.php?option=com_oms2&view=payments', $message);
 					break;
 				case 'addOrder':
 					JRequest::checkToken() or jexit('Invalid Token');
-					$model = $this->getModel('Oms2');
-					$message=$model->addOrder(JRequest::get('post'));
-					$insertId=$model->getInsertId();
-					$message.='. History - '.$model->addHistory($insertId);
-					$this->setRedirect('index.php?option=com_oms2&view=order&id='.$insertId, $message);
-					
+					$message=$model->addOrder();
+					$this->setRedirect('index.php?option=com_oms2&view=order&id='.$model->row->id, $message);
 					break;
+				case 'setstatus':
+						$message=$model->setOrderStatus();
+						$this->setRedirect('index.php?option=com_oms2', $message);
+						break;
 				default:
 					$this->setRedirect('index.php?option=com_oms2', FALSE);
 			}			
 		}
 	}
-
-
-
 
 }
 ?>
