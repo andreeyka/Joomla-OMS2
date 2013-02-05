@@ -366,7 +366,6 @@ class oms2ModelOms2 extends Jmodel
 		}
 		
 		if($this->orderFilter['order-filter-date']!='') $where[]="`time` like '%".$this->orderFilter['order-filter-date']."%'";
-		print_r($where);
 		return $where;
 	}	
 	

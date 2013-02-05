@@ -15,16 +15,18 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 ?>
-<div id="order-container" style="overflow:hidden;">
+<div id="oms-container">
 	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
-	<div id="table-body" style="overflow:hidden;">
-	<div id="filter-body">
+	<div id="table-container" style="overflow:hidden;">
+	<div id="filter-container">
 		<form action="index.php?option=com_oms2&task=filter" method="post" id="adminForm" name="adminForm">	
-			<div class="filter-element">
+			<?php if($this->OmsUser->user->omsadmin) {?>
+			<div class="filter-element oms-user">
 			<?php 
 			echo oms2Helper::getUserSelect('oms-user',array('onchange'=>'Joomla.submitbutton(\'filter\')'),$this->orderFilter['oms-user']);
 			?>
 			</div>
+			<?php }?>
 			<div class="filter-element">
 			<?php 
 			echo JHTML::calendar($this->orderFilter['order-filter-date'],'order-filter-date','order-filter-date','%Y-%m-%d',array('size'=>'6','onchange'=>'Joomla.submitbutton(\'filter\')'));
@@ -40,7 +42,7 @@ defined('_JEXEC') or die('Restricted access');
 			<?php echo JHTML::_('form.token'); ?>
 		</form>
 	</div>
-	<div id="table-body">
+	<div id="data-container">
 <?php 		
 if (count($this->OmsUser->orders)<=0){
 	?><div id="row-order">Нет подходящих заказов. Измените условия фильтров</div><?php
@@ -64,7 +66,7 @@ foreach ($this->OmsUser->orders as $key=>$order) {
 			} else {
 				$class='status'.$order->status;
 			}
-			if ($key['value']>$order->status) {
+			if ($key['value']>$order->status and $this->OmsUser->user->omsadmin) {
 				$onclick='onClick="javascript: if (confirm(\'Изменить статус?\')) { window.location=\'index.php?option=com_oms2&task=setstatus&order-status='.$key['value'].'&id='.$order->id.'\'; void(\'\') } else { void(\'\') };"';
 			} else {
 				$onclick='';
@@ -78,11 +80,13 @@ foreach ($this->OmsUser->orders as $key=>$order) {
 		<div class="cell">
 			<span class="url"><?php echo JHtml::link($order->item_url,$order->site,array('target'=>'_blank','title'=>'Просмотреть заказ на сайте магазина'));?></span>
 		</div>
+		<?php if($this->OmsUser->user->omsadmin) {?>
 		<div class="cell">
 			<span class="copy"><a  title="Копировать заказ" href="index.php?option=com_oms2&task=neworder&id=<?php echo $order->id;?>">Копировать</a></span>			
 			<span class="delete"><a title="Удалить заказ" href="index.php?option=com_oms2&task=deleteorder&id=<?php echo $order->id;?>">Удалить</a></span>
 			<span class="edit"><a title="Изменить заказ" href="index.php?option=com_oms2&task=editorder&id=<?php echo $order->id;?>">Изменить</a></span>
 		</div>
+		<?php }?>
 		<div class="clear"></div>
 		<div style="float:left; overflow: hidden; width: 60%; height:70px">
 			<div class="cell">

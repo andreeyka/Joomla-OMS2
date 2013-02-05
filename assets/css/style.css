@@ -1,5 +1,9 @@
 @CHARSET "UTF-8";
 
+#oms-container div {
+	border: 1px solid blue;
+}
+
 #filter-body  {
 	overflow: hidden;
 	float: left;

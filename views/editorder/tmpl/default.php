@@ -22,57 +22,58 @@ $order=$this->Order;
 ?>
 <form action="index.php?option=com_oms2&task=saveorder&id=<?php echo $order->id;?>" method="post" name="adminForm" id="adminForm"  enctype="multipart/form-data" >
 
-<div style="overflow:hidden;" id="order-container">
+<div id="oms-container">
 	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
     
-    <div style="overflow:hidden;">
-    	<div style="float: left; overflow:hidden;">
+    <div id="table-container">
+    <div id="edit-order-first-row">
+    	<div id="item">
     		<h3>Наименование</h3>
-    		<input id="order-item" size="40" name="order-item" value="<?php echo $order->item;?>">
+    		<input id="item" name="item" value="<?php echo $order->item;?>">
     	</div>
-    	<div style="float: left; overflow:hidden;">
+    	<div id="item_url">
     		<h3>Ссылка</h3>
-    		<input id="order-url" size="40" name="order-url" value="<?php echo $order->item_url;?>">
+    		<input id="item-url" name="item-url" value="<?php echo $order->item_url;?>">
     	</div>
-    	<div style="float: left; overflow:hidden;">
+    	<div id="status">
     		<h3>Статус</h3>
     		<?php echo oms2Helper::getStatusSelect('order-status',$order->status,$order->status);?>
     	</div>
     </div>
-    <div style="overflow:hidden;">
-    	<div style="float:left;">
+    <div id="edit-order-second-row">
+    	<div id="order-article">
     		<h3>Артикул</h3> 
     		<input id="order-article" size="10" name="order-article" value="<?php echo $order->article;?>">
     	</div>
-    	<div style="float:left;">
+    	<div id="order-size">
     		<h3>Размер</h3>
     		<input id="order-size" size="4" name="order-size" value="<?php echo $order->size;?>">
     	</div>
-    	<div style="float:left;">
+    	<div id="order-color">
     		<h3>Цвет</h3>
     		<input id="order-color" size="10" name="order-color" value="<?php echo $order->color;?>">
     	</div>
-    	<div style="float:left;">
+    	<div id="order-amount">
     		<h3>Кол-во</h3>
     		<input id="order-amount" name="order-amount" size="3" value="<?php echo $order->amount;?>">
     	</div>
-    	<div style="float:left;">
+    	<div id="order-price">
     		<h3>Цена</h3>
     		<input id="order-price" name="order-price" size="5" value="<?php echo $order->price;?>">
     	</div>
-    	<div style="float:left;">
+    	<div id="order-currecy">
     		<h3>Валюта</h3>
     		<input id="order-currecy" name="order-currency" size="5" value="<?php echo $order->currency;?>">
     	</div>
-    	<div style="float:left;">
+    	<div id="order-currecy-rate">
     		<h3>Курс</h3>
     		<input id="order-currecy-rate" name="order-currency-rate" size="5" value="<?php echo $order->currency_rate;?>">
     	</div>
-    	<div style="float:left;">
+    	<div id="order-tax">
     		<h3>Налог</h3>
     		<input id="order-tax" name="order-tax" size="5" value="<?php echo $order->tax;?>">
     	</div>
-    	<div style="float:left;">
+    	<div id="order-interest">
     		<h3>Коммисия	</h3>
     		<input id="order-interest" name="order-interest" size="5" value="<?php echo $order->interest;?>">
     	</div>
@@ -83,11 +84,10 @@ $order=$this->Order;
     </div>
     <div id="row-order-image">
     	<h3>Фото</h3>
-    	<div class="cell"><?php echo $order->image;?></div>
-    	<div class="cell"><input id="order-image" size="50" name="order-image" type="file" ></div> 
-    	
+    	<input id="order-image" size="50" name="order-image" type="file" >
     </div>
     <input id="form-submit" type="submit">
+</div>
 </div>
 	<input type="hidden" name="option" value="com_oms2" />
 	<input type="hidden" name="id" value="<?php echo $order->id;?>" />
