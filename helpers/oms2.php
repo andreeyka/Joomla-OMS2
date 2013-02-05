@@ -24,7 +24,7 @@ jimport('joomla.html.grid');
 class oms2Helper
 {
 	// Your custom code here
-	static  $allowed_status=[1,2,3,4,5];
+	static  $allowed_status=array(1,2,3,4,5);
 	
 	static function debug($param) {
 		echo "<pre>";

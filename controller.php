@@ -52,7 +52,11 @@ class oms2Controller extends JController
 			$this->setRedirect('index.php', 'Not allowed');
 			return;
 		}
-		if (in_array($adminGroup, array_keys($user->groups))) $user->omsadmin = true;
+		if (in_array($adminGroup, array_keys($user->groups))) {
+			$user->omsadmin = true;
+		} else {
+			$user->omsadmin = false;
+		}
 		
 		$model = $this->getModel('Oms2');
 		

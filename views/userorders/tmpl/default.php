@@ -105,6 +105,16 @@ foreach ($this->OmsUser->orders as $key=>$order) {
 			<span class="status header">Статус</span><br>
 			<span class="status"><?php echo $order->status_text; ?></span>
 		</div>
+		<?php $user=JFactory::getUser($order->user_id);?>
+		<div id="name" class="cell">
+			<span class="name header">Логин</span><br>
+			<span class="name"><?php echo $user->name; ?></span>
+		</div>
+		<div id="username" class="cell">
+			<span class="username header">Имя</span><br>
+			<span class="username"><?php echo $user->username; ?></span>
+		</div>
+		
 	</div>
 <?php 
 }

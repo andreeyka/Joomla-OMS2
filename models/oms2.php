@@ -34,9 +34,8 @@ class oms2ModelOms2 extends Jmodel
 		if ($this->user->omsadmin and $this->orderFilter['oms-user']>'0') {
 			$this->user_id = $this->orderFilter['oms-user'];
 		}
-		if(!isset($this->orderFilter['oms-user'])) { $this->orderFilter['oms-user']='0	';}
+		if(!isset($this->orderFilter['oms-user'])) { $this->orderFilter['oms-user']='0';}
 		if(!isset($this->orderFilter['order-filter-status']))$this->orderFilter['order-filter-status']=array(1=>1,3=>1,4=>1);
-		if(!isset($this->orderFilter['order-filter-user']))$this->orderFilter['order-filter-user']='0';
 		if(!isset($this->orderFilter['order-filter-date']))$this->orderFilter['order-filter-date']='';
 		parent::__construct();
 	}
@@ -196,7 +195,6 @@ class oms2ModelOms2 extends Jmodel
 		$this->row->price=str_replace(',','.',$data['order-price']);
 		$this->row->currency=$data['order-currency'];
 		$this->row->notes=$data['order-notes'];
-		$this->row->user_id=$this->user_id;
 		$this->row->site=$matches[1];
 		$this->row->currency_rate=str_replace(',','.',$data['order-currency-rate']);
 		$this->row->tax=str_replace(',','.',$data['order-tax']);
@@ -251,7 +249,6 @@ class oms2ModelOms2 extends Jmodel
 	function getOmsUser(){
 		$o = new stdclass;
 		$o->user=$this->user;
-		#$o->orders=$this->getOrders(); Удалить потом
 		$o->ordersSum=round($this->getOrdersCosts(),2);
 		$o->paymentsByStatus=$this->getPaymentsByStatus();
 		return $o;
@@ -266,7 +263,6 @@ class oms2ModelOms2 extends Jmodel
 	function getOmsUserDeliverys(){
 		$o=$this->getOmsUser();
 		$o->deliverys=$this->getDeliverys();
-		oms2Helper::debug($o);
 		return $o;
 	}
 	
@@ -277,26 +273,12 @@ class oms2ModelOms2 extends Jmodel
 	}
 	
 	function getDeliverys() {
-		/*
-		 * SELECT a.user_id, a.date, COUNT( * ) 
-			FROM  `wa79x_ordermanagementsystem_delivery` AS a, wa79x_ordermanagementsystem AS b
-			WHERE a.user_id = b.user_id
-			AND b.status =4
-			GROUP BY a.user_id, a.date
-			ORDER BY b.user_id, a.date
-			LIMIT 0 , 30
-		 */
-		
-		
+				
 		$query = $this->_db->getQuery(true);
 		$a=$this->_db->nameQuote('#__ordermanagementsystem_delivery');
-		$b=$this->_db->nameQuote('#__ordermanagementsystem');
-		$query->select("$a.date, $a.user_id, COUNT( * ) as count");
+		$query->select("*");
 		$query->from($a);
-		$query->from($b);
-		$query->where("$a.user_id = $b.user_id");
-		$query->where("$b.status = 4");
-		$query->group("$a.date, $a.user_id");
+		if ($this->orderFilter['oms-user']>'0')$query->where("$a.user_id='$this->user_id'");
 		$query->order("$a.date desc, $a.user_id");
 		$this->_db->setQuery($query);
 		$this->_db->query($query);
@@ -368,12 +350,23 @@ class oms2ModelOms2 extends Jmodel
 	}
 	
 	function getSqlWhere(){
-		if($this->orderFilter['oms-user']!='0' or !$this->admin) $where[]="`user_id`='".$this->user_id."'";
-		foreach ($this->orderFilter['order-filter-status'] as $key=>$value){
-			$status[]="`status`='".$key."'";
+		if(JRequest::getCmd('delivery')!=''){
+			$where[]='`delivery`=\''.JRequest::getCmd('delivery').'\'';
+			if(JRequest::getCmd('user_id')!=''  and $this->user->omsadmin){
+				$where[]="`user_id`='".JRequest::getCmd('user_id')."'";
+			} else {
+				$where[]="`user_id`='".$this->user_id."'";
+			}
+		}else{
+			if($this->orderFilter['oms-user']!='0' or !$this->admin) $where[]="`user_id`='".$this->user_id."'";
+			foreach ($this->orderFilter['order-filter-status'] as $key=>$value){
+				$status[]="`status`='".$key."'";
+			}
+			if(is_array($status)) $where[]='('.implode(' OR ', $status).')';
 		}
-		$where[]='('.implode(' OR ', $status).')';
+		
 		if($this->orderFilter['order-filter-date']!='') $where[]="`time` like '%".$this->orderFilter['order-filter-date']."%'";
+		print_r($where);
 		return $where;
 	}	
 	

@@ -44,6 +44,7 @@ html body * span.clear, html body * div.clear, html body * li.clear, html body *
 #history-container, #history-container div
 {
 	overflow:hidden;
+	border: 1px solid;
 }
 div#row-order,
 div#oms-menu-row

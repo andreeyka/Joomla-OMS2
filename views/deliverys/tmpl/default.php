@@ -42,70 +42,32 @@ defined('_JEXEC') or die('Restricted access');
 	</div>
 	<div id="table-body">
 <?php 		
-if (count($this->OmsUser->orders)<=0){
+if (count($this->OmsUser->deliverys)<=0){
 	?><div id="row-order">Нет подходящих заказов. Измените условия фильтров</div><?php
 }
-foreach ($this->OmsUser->orders as $key=>$order) {
-	$order->status_text=oms2Helper::getStatus($order->status);
-	$this->orders[$key]=$order;
-	$copylink=JHtml::link('index.php?option=com_oms2&task=neworder&id='.$order->id,'Копировать');
-?>
-	<div id="row-order">
-		<div class="cell">
-			<span class="date"><?php echo JHtml::link('index.php?option=com_oms2&task=order&id='.$order->id,substr($order->time, 0,10));?></span>
-		</div>
-		<div class="cell">
-		<?php
-		foreach (oms2Helper::getAllStatus() as $key) {
-			if ($key['value']<$order->status) {
-				$class='passed';
-			} elseif ($key['value']>$order->status) {
-				$class='notpassed';
-			} else {
-				$class='status'.$order->status;
-			}
-			if ($key['value']>$order->status) {
-				$onclick='onClick="javascript: if (confirm(\'Изменить статус?\')) { window.location=\'index.php?option=com_oms2&task=setstatus&order-status='.$key['value'].'&id='.$order->id.'\'; void(\'\') } else { void(\'\') };"';
-			} else {
-				$onclick='';
+foreach ($this->OmsUser->deliverys as $key=>$row) {
+	?>
+	<div id="row-oms">
+			
+			
+			<?php
+			if ($this->OmsUser->user->omsadmin and $row->user_id!=$this->OmsUser->user->id) {
+				$url = "index.php?option=com_oms2&delivery=$row->date&user_id=$row->user_id";
+			}else{
+				$url = "index.php?option=com_oms2&delivery=$row->date";
 			} 
-			?>	
-			<div title="<?php echo $key['text']?>" <?php echo $onclick;?> class="statusbar <?php echo $class;?>"></div>
-			<?php 
-		}
-		?>
-		</div>
-		<div class="cell">
-			<span class="url"><?php echo JHtml::link($order->item_url,$order->site,array('target'=>'_blank','title'=>'Просмотреть заказ на сайте магазина'));?></span>
-		</div>
-		<div class="cell">
-			<span class="copy"><a  title="Копировать заказ" href="index.php?option=com_oms2&task=neworder&id=<?php echo $order->id;?>">Копировать</a></span>			
-			<span class="delete"><a title="Удалить заказ" href="index.php?option=com_oms2&task=deleteorder&id=<?php echo $order->id;?>">Удалить</a></span>
-			<span class="edit"><a title="Изменить заказ" href="index.php?option=com_oms2&task=editorder&id=<?php echo $order->id;?>">Изменить</a></span>
-		</div>
-		<div class="clear"></div>
-		<div style="float:left; overflow: hidden; width: 60%; height:70px">
+			?>
+			<div class="cell delivery">Доставка<br><?php echo $row->date;?></div>
+			<div class="cell user">Пользователь<br><?php echo $row->user_id;?></div>
+			<div class="cell price">Цена досткаки<br><?php echo $row->price;?></div>
+			<div class="cell weight">Вес<br><?php echo $row->weight;?></div>
 			<div class="cell">
-				<?php if($order->image=='') $order->image='noimage.jpg';?>
-				<a rel="rokbox" href="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>">
-					<img alt="Фото" src="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>">
-				</a>
+				<span class="item"><a  title="Просмотреть заказы" href="<?php echo $url;?>">Заказы</a></span>			
+				<br>
+				<span class="delete"><a title="Изменить доставка" href="">Изменить</a></span>
 			</div>
-			<span class="item"><?php echo JHtml::link('index.php?option=com_oms2&task=order&id='.$order->id,$order->item);?></span>
+			<div class="clear"></div>
 		</div>
-		<div id="amount" class="cell">
-			<span class="amount header">Кол-во</span><br>
-			<span class="amount"><?php echo $order->amount;?></span>
-		</div>
-		<div id="price" class="cell">
-			<span class="price header">Цена</span><br>
-			<span class="price"><?php echo $order->price; ?></span>
-		</div>
-		<div id="status" class="cell">
-			<span class="status header">Статус</span><br>
-			<span class="status"><?php echo $order->status_text; ?></span>
-		</div>
-	</div>
 <?php 
 }
  ?>	
