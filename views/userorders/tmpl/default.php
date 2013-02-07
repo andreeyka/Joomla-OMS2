@@ -88,11 +88,11 @@ foreach ($this->OmsUser->orders as $key=>$order) {
 		</div>
 		<?php }?>
 		<div class="clear"></div>
-		<div style="float:left; overflow: hidden; width: 60%; height:70px">
-			<div class="cell">
+		<div class="cell" id="order-item">
+			<div class="cell" id="order-image">
 				<?php if($order->image=='') $order->image='noimage.jpg';?>
 				<a rel="rokbox" href="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>">
-					<img alt="Фото" src="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>">
+					<img  id="order-image" alt="Фото" src="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>">
 				</a>
 			</div>
 			<span class="item"><?php echo JHtml::link('index.php?option=com_oms2&task=order&id='.$order->id,$order->item);?></span>
@@ -120,6 +120,7 @@ foreach ($this->OmsUser->orders as $key=>$order) {
 		</div>
 		
 	</div>
+	<div class="clear"></div>
 <?php 
 }
  ?>	

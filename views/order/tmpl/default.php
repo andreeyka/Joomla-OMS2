@@ -20,56 +20,58 @@ $order=$this->Order;
 $History=$this->History;
 ?>
 
-<div style="overflow:hidden;" id="order-container">
+<div id="oms-container">
+<div id="order-container">
 
 	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
 
-    <div style="background: #fd0">
-    	<div style="float:left; width:40%;"><?php echo $order->time;?></div>
-    	<div style="float:left; width:40%;"><?php echo $order->site;?></div>
-    	<div style="overflow:hidden;">
+    <div id="order-first-row">
+    	<div><?php echo $order->time;?></div>
+    	<div><?php echo $order->site;?></div>
+    	<div>
     		<?php echo JHtml::link($order->item_url,'Ссылка',array('target'=>'_blank'));?>
     		<?php echo JHtml::link("index.php?option=com_oms2&task=editorder&id=".$order->id,'Изменить');?>
     	</div>
     </div>
-    <div style=""><h1><?php echo $order->item;?></h1></div>
-    <div style="height=300px;overflow:hidden;">
-    	<div style="float:left; width:15%; height:100px;">
+    <div id=order-item><h1><?php echo $order->item;?></h1></div>
+    <div>
+    	<div id="order-image">
     		<?php if($order->image=='') $order->image='noimage.jpg';?>
     		<a rel="rokbox" href="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>"><img alt="Фото" width=100 height=100 src="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>"></a>
     	</div>
-    	<div style="float:left; width:33%; height:100px;">
+    	<div id="order-params">
     		<ul>
     			<li>Артикул: <?php echo $order->article;?></li>
     			<li>Размер: <?php echo $order->size;?></li>
     			<li>Цвет: <?php echo $order->color;?></li>
     		</ul>
     	</div>
-    	<div style="float:left; width:7%; height:100px;"><?php echo $order->amount;?></div>
-    	<div style="float:left; width:10%; height:100px;"><?php echo $order->price;?></div>
-    	<div style="float:left; width:20%; height:100px;">
+    	<div id="order-amount"><?php echo $order->amount;?></div>
+    	<div id="order-price"><?php echo $order->price;?></div>
+    	<div id="order-costs">
     		<ul style="vertical-align: top;">
     			<li>Налог: <?php echo $order->tax;?>%</li>
     			<li>Коммисия: <?php echo $order->interest;?>%</li>
     			<li>Курс: <?php echo $order->currency_rate;?> (<?php echo $order->currency?>)</li>
     		</ul>
     	</div>
-    	<div style="float:left; width:10%; height:100px;"><?php echo $order->total;?></div>
+    	<div id="order-total"><?php echo $order->total;?></div>
     </div>
-    <div style="">Комментарий</div>
-    <div style=""><h3><?php echo $order->notes;?></h3></div>
+    <div id="order-notes-header">Комментарий</div>
+    <div id="order-notes"><h3><?php echo $order->notes;?></h3></div>
 </div>
-<div style="overflow:hidden;" id="history-container">
+<div id="history-container">
 <?php 
 foreach ($History as $event){
 	?>
-	<div style="overflow:hidden;" id="history-row">
-		<div style="overflow:hidden; float: left;" id="history-event-date">
+	<div id="history-row">
+		<div  id="history-event-date">
 		<?php echo $event->date;?>
 		</div> 
-		<div style="overflow:hidden; float: left;" id="history-event-date">
+		<div id="history-event-date">
 		Изменен статус. Текущий статус: <?php echo $event->status;?>
 		</div>
 	</div>	
 <?php }?>
+</div>
 </div>

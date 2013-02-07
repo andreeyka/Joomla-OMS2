@@ -1,0 +1,173 @@
+@CHARSET "UTF-8";
+
+#oms-container div {
+	border: 1px solid blue;
+}
+div#oms-container {
+	border: 1px solid blue;
+}
+#filter-body  {
+	overflow: hidden;
+	float: left;
+	background: #f9f9f9;
+	width: 150px;
+}
+#filter-body select {
+	width: 100%;
+}
+
+div.filter-element {
+	box-shadow: 0 0 2px rgba(0,0,0,0.5);
+	background: #eee;
+	padding: 2px;
+	margin: 2px;
+	margin-bottom: 5px;
+	border-radius: 2px;
+	white-space: nowrap;
+	overflow: hidden; 
+}
+
+html body * span.clear, html body * div.clear, html body * li.clear, html body * dd.clear 
+{
+	clear:both;
+	background: none;
+	border: 0;
+	clear: both;
+	display: block;
+	float: none;
+	font-size: 0;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+#payment-container, #payment-container div,
+#order-container, #order-container div,
+#history-container, #history-container div
+{
+	overflow:hidden;
+	border: 1px solid;
+}
+div#row-order,
+div#oms-menu-row
+{
+	box-shadow: 0 0 2px rgba(0,0,0,0.5);
+	border-radius:4px;
+	background: #eee;
+	margin: 4px;
+	padding: 0px;
+}
+#oms-menu-row div	{
+	padding-left: 25px; 
+}
+#row-order
+{
+}
+
+.cell {
+	margin: 2px;
+	padding: 2px;
+	overflow:hidden;
+	float: left;
+}
+
+#payment-container a,
+#order-container a {
+	border-radius: 2px;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: normal;
+}
+		#row-order .statusbar {
+			border: 1px thin gray;
+			border-radius: 0px;
+			width: 10px;
+			height: 10px;
+			margin: 1px;
+			float: left;
+	}
+
+#row-order .statusbar:hover {
+	background: black;
+}
+
+#row-order span.header,
+
+{
+        padding: 5px;
+        font-size:1.4em;
+        line-height:1.19em;
+        font-weight:normal;
+        margin:0 -5px 10px -5px
+
+}
+
+.status1{
+	background: white;
+}
+.status2{
+	background: red;
+}
+.status3{
+	background: yellow;
+}
+.status4{
+	background: green;
+}
+.status5{
+	background: blue;
+}
+
+.passed {
+	background: blue;
+}
+
+#row-order span.item a,
+#payment-container,
+#order-container,
+select#oms-user option
+{
+	font-family: 'Scada', sans-serif;
+}
+#row-order span.item a,
+{
+	border-bottom-color: rgb(221, 221, 221);
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	color: rgb(13, 76, 137);
+	display: block;
+	font-size: 18px;
+	font-weight: normal;
+	height: 21px;
+	line-height: 21.3125px;
+	margin-bottom: 10px;
+	margin-left: -5px;
+	margin-right: -5px;
+	margin-top: 0px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 5px;
+	text-align: left;
+}
+
+.cell img {
+	width:50px;
+	height:50px;
+	filter:alpha(opacity=50);
+  -moz-opacity:0.5;
+  -khtml-opacity: 0.5;
+   opacity: 0.7;
+	box-shadow: 0 0 2px rgba(0,0,0,0.5);
+	
+	background: #eee;
+	padding: 2px;
+	margin: 2px;
+	margin-bottom: 5px;
+	border-radius: 2px;
+}

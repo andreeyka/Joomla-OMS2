@@ -15,22 +15,22 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 ?>
-<div id="order-container" style="overflow:hidden;">
+<div id="oms-container">
 	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
-	<div id="table-body" style="overflow:hidden;">
-	<div id="filter-body">
+	<div id="table-container">
+	<div id="filter-container">
 		<form action="index.php?option=com_oms2&task=filter" method="post" id="adminForm" name="adminForm">	
-			<div class="filter-element">
+			<div class="filter-element" id="filter-oms-user">
 			<?php 
 			echo oms2Helper::getUserSelect('oms-user',array('onchange'=>'Joomla.submitbutton(\'filter\')'),$this->orderFilter['oms-user']);
 			?>
 			</div>
-			<div class="filter-element">
+			<div class="filter-element" id="order-filter-date">
 			<?php 
 			echo JHTML::calendar($this->orderFilter['order-filter-date'],'order-filter-date','order-filter-date','%Y-%m-%d',array('size'=>'6','onchange'=>'Joomla.submitbutton(\'filter\')'));
 			?>
 			</div>
-			<div class="filter-element">
+			<div class="filter-element" id="order-filter-status">
 			<?php 
 			echo oms2Helper::getCheckList($this->orderFilter['order-filter-status'], 'order-filter-status',"onchange=\"Joomla.submitbutton('filter')\"");
 			?>
@@ -40,10 +40,10 @@ defined('_JEXEC') or die('Restricted access');
 			<?php echo JHTML::_('form.token'); ?>
 		</form>
 	</div>
-	<div id="table-body">
+	<div id="table-container">
 <?php 		
 if (count($this->OmsUser->deliverys)<=0){
-	?><div id="row-order">Нет подходящих заказов. Измените условия фильтров</div><?php
+	?><div id="row-order" id="no-deliverys">Нет подходящих заказов. Измените условия фильтров</div><?php
 }
 foreach ($this->OmsUser->deliverys as $key=>$row) {
 	?>

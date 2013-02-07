@@ -15,11 +15,11 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 ?>
-<div id="order-container" style="overflow:hidden;">
+<div id="oms-container">
 	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
 	
-	<div id="order-tablebody" style="overflow:hidden;">
-	<div id="table=body" style="overflow:hidden; float: left; width:100px; height: 300px;">
+	<div id="table-container">
+	<div id="filter-container">
 		<form action="index.php?option=com_oms2&task=filter" method="post" id="adminForm" name="adminForm">	
 	<?php 
 		
@@ -30,7 +30,7 @@ defined('_JEXEC') or die('Restricted access');
 			<?php echo JHTML::_('form.token'); ?>
 		</form>
 	</div>
-	<div id="table=body" style="overflow:hidden;">
+	<div id="" style="overflow:hidden;">
 <?php 		
 foreach ($this->OmsUser->payments as $key=>$payment) {
 	?>
