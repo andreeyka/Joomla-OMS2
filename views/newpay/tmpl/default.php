@@ -19,23 +19,26 @@ defined('_JEXEC') or die('Restricted access');
 ?>
 
 <div id="oms-container">
+
+
+	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
 <div id="payment-container">
 <form action="index.php?option=com_oms2&task=addpay" method="post" name="adminForm" id="adminForm">
-	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
-	<div id="payment-date">
+<div id="payment-date" class="cell">
     		<h3>Дата платежа</h3>
 			<?php 
 				echo JHTML::calendar(date('Y-m-d'),'payment_date','payment_date','%Y-%m-%d');
 			?>
     </div>
-    <div id="payment-value">
+    <div id="payment-value" class="cell">
     		<h3>Сумма</h3>
     		<input id="payment-value" name="payment-value">
     </div>
-    <div id="paymeny-notes">
+    <div id="paymeny-notes" class="cell">
     		<h3>Комментарий</h3>
     		<input id="payment-notes" size="50" name="payment-notes">
     </div>
+    <div class="clear"></div>
     <input id="form-submit" type="submit">
 	<input type="hidden" name="option" value="com_oms2" />
 	<input type="hidden" name="task" value="addpay" />

@@ -1,23 +1,4 @@
 @CHARSET "UTF-8";
-
-div#oms-container, #oms-container div,#oms-container a {
-	border: 0px solid blue;
-	margin: 0px;
-	padding: 0px;
-	font-family: 'Scada', sans-serif;
-	font-size: 14px;
-	text-decoration: none;
-	overflow: hidden;
-	
-}
-#oms-container a {
-	text-decoration: none;
-}
-#filter-container {
-	overflow: hidden;
-	float: left;
-	width: 150px;
-}
 html body * span.clear, html body * div.clear, html body * li.clear, html body * dd.clear 
 {
 	clear:both;
@@ -35,64 +16,323 @@ html body * span.clear, html body * div.clear, html body * li.clear, html body *
 	width: 0;
 	height: 0;
 }
-img#order-image{
-	width: 80px;
-	height: 80px;
+div#oms-container, 
+#oms-container div, 
+#oms-container a 
+{
+	border: 0px solid blue;
+	margin: 0px;
+	padding: 0px;
+	/*font-family: 'Scada', sans-serif;*/
+	font-size: 14px;
+	text-decoration: none;
+	overflow: hidden;
+	
+}
+
+#oms-container div#oms-menu-row, 
+#oms-container div#row-order, 
+#oms-container div#filter-container,
+#oms-container div#order-view-container,
+#oms-container div#history-row,
+#oms-container div#payment-container
+{
+	box-shadow: 2px 2px 2px black;
+	border-radius:0px;
+	background: #eee;
+	margin: 4px;
+	margin-bottom: 6px;
+	padding: 2px;
+	overflow: hidden;
+}
+
+#oms-container div.cell{
+	margin: 2px;
+	padding: 2px;
+	overflow:hidden;
+	float: left;
+	word-wrap: normal;
+}
+
+#oms-container a {
+	text-decoration: none;
+}
+#oms-container #filter-container {
+	overflow: hidden;
+	float: left;
+	width: 150px;
+}
+
+div#oms-menu-row a {
+	
+	
+	padding: 2px;
+	margin-left: 20px;
+	
+}
+
+div#oms-menu-row a:HOVER{
+	border-bottom: 2px solid black;
+}
+
+
+#orders-container #row-order div.order-top-menu, #orders-container #row-order div.order-top-menu a {
+	font-size: 10px;
+	text-transform: uppercase;
+	margin-right: 5px;
+	margin-right: 5px;
+	text-decoration: none;
+	height: 17px;
+	padding:2px;
+	border-radius:2px;
+	}
+
+#orders-container #row-order div.order-top-menu a:HOVER {
+	background: white;
+	
+}
+
+#orders-container div#order-admin-menu {
+	width: 220px;
+}
+
+#orders-container div#order-item {
+	width: 350px;
+
+}
+#orders-container div#order-item span a{
+	color: black;
+	text-transform: uppercase;
+}
+
+#orders-container span.name.header{
+	color: black;
+	font-weight: bold;
+	
+}
+
+
+#orders-container img#order-image{
+	width: 70px;
+	height: 70px;
 	box-shadow: 0 0 4px rgba(0,0,0,0.5);
 	border-radius:4px;
 	border: 1px solid gray;
 	margin: 3px;
 }
-div#oms-menu-row, div#row-order, div#filter-container
-{
-	box-shadow: 0 0 5px rgba(0,0,0,0.5);
-	border-radius:2px;
-	background: #eee;
-	margin: 4px;
-	padding: 2px;
-	overflow: hidden;
-}
-div#row-order{
+
+#orders-container div#row-order{
 	margin-bottom: 10px;
 }
-#oms-menu-row div	{
+#orders-container #oms-menu-row div	{
 	padding-left: 25px; 
 }
 
 
-.cell {
-	margin: 2px;
-	padding: 2px;
-	overflow:hidden;
-	float: left;
-}
 
-#row-order  .statusbar {
-	border: 1px thin gray;
+
+#orders-container #row-order  .statusbar {
 	border-radius: 0px;
+	border: 1px solid;
 	width: 10px;
 	height: 10px;
 	margin: 1px;
 	margin-top: 5px;
 	float: left;
 }
-.status1{
+
+#orders-container #row-order div#price,
+#orders-container #row-order div#amount	{
+	width: 90px;
+	text-align: center;
+	color: black;
+}
+
+#orders-container .status1{
 	background: white;
 }
-.status2{
+#orders-container .status2{
 	background: red;
 }
-.status3{
+#orders-container .status3{
 	background: yellow;
+	color: black;
 }
-.status4{
+#orders-container .status4{
 	background: green;
 }
-.status5{
+#orders-container .status5{
 	background: blue;
 }
 
-.passed {
+#orders-container div.status.status1{
+}
+#orders-container div.status.status2{
+	color: white;
+}
+#orders-container div.status.status3{
+}
+#orders-container div.status.status4{
+	color: yellow;
+}
+#orders-container div.status.status5{
+	color: white;
+}
+
+#orders-container .passed {
+	background: blue;
+	color: black;
+}
+
+#orders-container div.status{
+	box-shadow: 2px 2px 2px black;
+	margin-top: 5px;
+	padding: 5px;
+	border-radius: 0px;
+	border: 1px solid black;
+	width: 150px;
+	overflow: hidden;
+	text-align: center;
+}
+
+div#order-container
+{
+	box-shadow: 0 0 6px gray;
+	border-radius:5px;
+	background: #eee;
+	margin: 4px;
+	padding: 5px;
+	padding-left: 10px;
+	overflow: hidden;
+	color: black;
+}
+#order-container div {
+	padding-bottom: 5px;
+}
+#order-container #order-item span,
+#order-container #order-url span,
+#order-container #order-notes span
+{
+	width: 130px;
+	display: inline-block;
+}
+
+#order-container #order-item input,
+#order-container #order-url input,
+#order-container #order-notes input
+
+{
+	width: 70%;
+	display: inline-block;
+}
+
+
+#order-view-container	 img#order-image{
+	width: 100px;
+	height: 100px;
+	box-shadow: 0 0 4px rgba(0,0,0,0.5);
+	border-radius:4px;
+	border: 1px solid gray;
+	margin: 3px;
+}
+
+#order-view-container #order-params{
+	width: 160px;
+}
+
+#order-view-container #order-amount{
+	width:60px;
+}
+
+#order-view-container #order-price{
+	width: 80px;
+}
+
+#order-view-container #order-costs{
+	width: 140px;
+}
+
+#order-view-container #order-total{
+	width: 100px;
+}
+
+#order-view-container #order-second-row{
+	color: black;
+	text-align: center;
+}
+
+#order-view-container #order-second-row div{
+	margin-top: 20px;
+	
+}
+
+#order-view-container #order-second-row span{
+	font-weight: bold;
+}
+#order-view-container #order-second-row div#order-image{
+	margin-top: 0px;
+}
+#order-view-container #order-second-row li{
+	text-align: left;
+}
+#order-view-container #order-second-row ul{
+	margin-top: 0px;
+}
+#order-view-container  #order-second-row div.status{
+	margin-top: 5px;
+	padding: 5px;
+	border-radius: 3px;
+	border: 1px solid black;
+	width: 150px;
+	overflow: hidden;
+	text-align: center;
+}
+
+#order-view-container .status1{
+	background: white;
+}
+#order-view-container .status2{
+	background: red;
+}
+#order-view-container .status3{
+	background: yellow;
+}
+#order-view-container .status4{
+	background: green;
+}
+#order-view-container .status5{
 	background: blue;
 }
 
+#history-container #history-row{
+	color: black;
+	
+}
+
+#history-container #history-row div.status1{
+	background: white;
+}
+
+#history-container #history-row div.status2{
+	background: red;
+	color: white;
+}
+
+#history-container #history-row div.status3{
+	background: yellow;
+}
+
+#history-container #history-row div.status4{
+	background: green;
+}
+
+#history-container #history-row div.status5{
+	background: blue;
+	
+}
+
+#history-container #history-row div#history-event-status{
+	border: 1px solid gray;
+	width: 150px;
+	text-align: center;
+}

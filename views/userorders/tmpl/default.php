@@ -42,7 +42,7 @@ defined('_JEXEC') or die('Restricted access');
 			<?php echo JHTML::_('form.token'); ?>
 		</form>
 	</div>
-	<div id="data-container">
+	<div id="orders-container">
 <?php 		
 if (count($this->OmsUser->orders)<=0){
 	?><div id="row-order">Нет подходящих заказов. Измените условия фильтров</div><?php
@@ -53,7 +53,7 @@ foreach ($this->OmsUser->orders as $key=>$order) {
 	$copylink=JHtml::link('index.php?option=com_oms2&task=neworder&id='.$order->id,'Копировать');
 ?>
 	<div id="row-order">
-		<div class="cell">
+		<div id="order-date" class="cell order-top-menu" >
 			<span class="date"><?php echo JHtml::link('index.php?option=com_oms2&task=order&id='.$order->id,substr($order->time, 0,10));?></span>
 		</div>
 		<div class="cell">
@@ -77,14 +77,18 @@ foreach ($this->OmsUser->orders as $key=>$order) {
 		}
 		?>
 		</div>
-		<div class="cell">
+		<div class="cell order-top-menu">
 			<span class="url"><?php echo JHtml::link($order->item_url,$order->site,array('target'=>'_blank','title'=>'Просмотреть заказ на сайте магазина'));?></span>
 		</div>
 		<?php if($this->OmsUser->user->omsadmin) {?>
-		<div class="cell">
+		<div id="order-admin-menu" class="cell order-top-menu">
 			<span class="copy"><a  title="Копировать заказ" href="index.php?option=com_oms2&task=neworder&id=<?php echo $order->id;?>">Копировать</a></span>			
 			<span class="delete"><a title="Удалить заказ" href="index.php?option=com_oms2&task=deleteorder&id=<?php echo $order->id;?>">Удалить</a></span>
 			<span class="edit"><a title="Изменить заказ" href="index.php?option=com_oms2&task=editorder&id=<?php echo $order->id;?>">Изменить</a></span>
+		</div>
+		<?php $user=JFactory::getUser($order->user_id);?>
+		<div id="name" class="cell  order-top-menu">
+			<span class="name header"><?php echo $user->name; ?>(<?php echo $user->username; ?>)</span>
 		</div>
 		<?php }?>
 		<div class="clear"></div>
@@ -103,21 +107,12 @@ foreach ($this->OmsUser->orders as $key=>$order) {
 		</div>
 		<div id="price" class="cell">
 			<span class="price header">Цена</span><br>
-			<span class="price"><?php echo $order->price; ?></span>
+			<span class="price"><?php echo $order->price; ?> (<?php echo $order->currency;?>)</span>
 		</div>
 		<div id="status" class="cell">
-			<span class="status header">Статус</span><br>
-			<span class="status"><?php echo $order->status_text; ?></span>
+			<div class="status status<?php echo $order->status;?>"><?php echo $order->status_text; ?></div >
 		</div>
-		<?php $user=JFactory::getUser($order->user_id);?>
-		<div id="name" class="cell">
-			<span class="name header">Логин</span><br>
-			<span class="name"><?php echo $user->name; ?></span>
-		</div>
-		<div id="username" class="cell">
-			<span class="username header">Имя</span><br>
-			<span class="username"><?php echo $user->username; ?></span>
-		</div>
+		
 		
 	</div>
 	<div class="clear"></div>

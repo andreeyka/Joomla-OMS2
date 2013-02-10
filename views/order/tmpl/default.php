@@ -18,46 +18,54 @@ defined('_JEXEC') or die('Restricted access');
 // Your custom code here
 $order=$this->Order;
 $History=$this->History;
+$order->status_text=oms2Helper::getStatus($order->status);
+
 ?>
 
 <div id="oms-container">
-<div id="order-container">
+
 
 	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
-
+<div id="order-view-container">
     <div id="order-first-row">
-    	<div><?php echo $order->time;?></div>
-    	<div><?php echo $order->site;?></div>
-    	<div>
-    		<?php echo JHtml::link($order->item_url,'Ссылка',array('target'=>'_blank'));?>
+    	<div class="cell"><?php echo $order->time;?></div>
+    	<div class="cell"><?php echo JHtml::link($order->item_url,$order->site,array('target'=>'_blank'));?></div>
+    	<?php $user=JFactory::getUser($order->user_id);?>
+    	<div id="name" class="cell  order-top-menu">
+			<span class="name header"><?php echo $user->name; ?>(<?php echo $user->username; ?>)</span>
+		</div>
+		<?php if ($this->OmsUser->user-omsadmin) {?>
+    	<div class="cell">
     		<?php echo JHtml::link("index.php?option=com_oms2&task=editorder&id=".$order->id,'Изменить');?>
     	</div>
-    </div>
+    	<?php }?>
+    </div >
     <div id=order-item><h1><?php echo $order->item;?></h1></div>
-    <div>
-    	<div id="order-image">
+    <div id="order-second-row"> 
+    	<div id="order-image" class="cell">
     		<?php if($order->image=='') $order->image='noimage.jpg';?>
-    		<a rel="rokbox" href="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>"><img alt="Фото" width=100 height=100 src="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>"></a>
+    		<a rel="rokbox" href="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>"><img id="order-image" alt="Фото" width=100 height=100 src="<?php echo JURI::root(true) . '/components/com_oms2/assets/images/orders/'.$order->image;?>"></a>
     	</div>
-    	<div id="order-params">
+    	<div id="order-params"  class="cell">
     		<ul>
-    			<li>Артикул: <?php echo $order->article;?></li>
-    			<li>Размер: <?php echo $order->size;?></li>
-    			<li>Цвет: <?php echo $order->color;?></li>
+    			<li><span>Артикул:</span> <?php echo $order->article;?></li>
+    			<li><span>Размер:</span> <?php echo $order->size;?></li>
+    			<li><span>Цвет: </span><?php echo $order->color;?></li>
     		</ul>
     	</div>
-    	<div id="order-amount"><?php echo $order->amount;?></div>
-    	<div id="order-price"><?php echo $order->price;?></div>
-    	<div id="order-costs">
+    	<div id="order-amount"  class="cell"><span>Кол-во</span><br><?php echo $order->amount;?></div>
+    	<div id="order-price"  class="cell"><span>Цена</span><br><?php echo $order->price;?> <?php echo $order->currency;?></div>
+    	<div id="order-costs"  class="cell">
     		<ul style="vertical-align: top;">
-    			<li>Налог: <?php echo $order->tax;?>%</li>
-    			<li>Коммисия: <?php echo $order->interest;?>%</li>
-    			<li>Курс: <?php echo $order->currency_rate;?> (<?php echo $order->currency?>)</li>
+    			<li><span>Налог:</span> <?php echo $order->tax;?>%</li>
+    			<li><span>Коммисия:</span> <?php echo $order->interest;?>%</li>
+    			<li><span>Курс:</span> <?php echo $order->currency_rate;?> (<?php echo $order->currency?>)</li>
     		</ul>
     	</div>
-    	<div id="order-total"><?php echo $order->total;?></div>
+    	<div id="order-total"  class="cell"><span>Итого</span><br><?php echo $order->total;?> руб.</div>
+    	<div id="order-status"  class="cell"><span>Статус</span><br><div class="status <?php echo 'status'.$order->status;?>"><?php echo $order->status_text;?></div></div>
     </div>
-    <div id="order-notes-header">Комментарий</div>
+    <div id="order-notes-header"><h2>Комментарий</h2></div>
     <div id="order-notes"><h3><?php echo $order->notes;?></h3></div>
 </div>
 <div id="history-container">
@@ -65,11 +73,12 @@ $History=$this->History;
 foreach ($History as $event){
 	?>
 	<div id="history-row">
-		<div  id="history-event-date">
+		<div  id="history-event-date" class="cell">
 		<?php echo $event->date;?>
 		</div> 
-		<div id="history-event-date">
-		Изменен статус. Текущий статус: <?php echo $event->status;?>
+		<div  id="history-event-message" class="cell">Изменен статус. Текущий статус: </div>
+		<div id="history-event-status" class="cell status<?php echo $event->status;?>">
+		<?php echo oms2Helper::getStatus($event->status);?>
 		</div>
 	</div>	
 <?php }?>

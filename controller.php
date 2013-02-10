@@ -35,7 +35,7 @@ class oms2Controller extends JController
 	{
 		
 		$woView=array('addOrder','saveorder','addpay','pconfirm','filter', 'deleteorder','setstatus');
-		$adminGroup='9';
+		$adminGroup='10';
 		
 		$document = JFactory::getDocument();
 		$document->addStyleSheet(JURI::root(true) . '/components/com_oms2/assets/css/style.css');

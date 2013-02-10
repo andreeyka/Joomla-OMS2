@@ -23,54 +23,54 @@ $order=$this->Order;
 
 <form action="index.php?option=com_oms2&task=addOrder" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data" >
 <div id="oms-container" >
-<div id="order-container" >
+
 	
 
 <?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
-
+<div id="order-container" >
     <div id="new-order-first-row">
-    	<div id="order-item">
-    		<h3>Наименование</h3>
+    	<div id="order-item" >
+    		<span>Наименование</span>
     		<input id="order-item" size="50" name="order-item" value="<?php echo $order->item;?>">
     	</div>
     	<div id="order-url">
-    		<h3>Ссылка</h3>
+    		<span>Ссылка</span>
     		<input id="order-url" size="50" name="order-url" value="<?php echo $order->item_url;?>">
     	</div>
     </div>
     <div id="new-order-second-row">
-    	<div id="order-article">
-    		<h3>Артикул</h3> 
+    	<div id="order-article" class="cell">
+			Артикул 
     		<input id="order-article" size="10" name="order-article" value="<?php echo $order->article;?>">
     	</div>
-    	<div id="order-size">
-    		<h3>Размер</h3>
+    	<div id="order-size" class="cell">
+    		Размер
     		<input id="order-size" size="4" name="order-size" value="<?php echo $order->size;?>">
     	</div>
-    	<div id="order-color">
-    		<h3>Цвет</h3>
+    	<div id="order-color" class="cell">
+    		Цвет
     		<input id="order-color" size="10" name="order-color" value="<?php echo $order->color;?>">
     	</div>
-    	<div id="order-amount">
-    		<h3>Кол-во</h3>
+    	<div id="order-amount" class="cell">
+    		Кол-во
     		<input id="order-amount" name="order-amount" size="3" value="<?php echo $order->amount;?>">
     	</div>
-    	<div id="order-price">
-    		<h3>Цена</h3>
+    	<div id="order-price" class="cell">
+    		Цена
     		<input id="order-price" name="order-price" size="5" value="<?php echo $order->price;?>">
     	</div>
-    	<div id="order-currency">
-    		<h3>Валюта</h3>
+    	<div id="order-currency" class="cell">
+    		Валюта
     		<?php echo oms2Helper::getCurrencySelect("order-currency",$order->currency);?>
     	</div>
     	
     </div>
     <div id="order-notes">
-    	<h3>Комментарий</h3>
+    	<span>Комментарий</span>
     	<input id="item-form" size="50" name="order-notes" value="<?php echo $order->notes;?>">
     </div>
     <div id="order-notes">
-    	<h3>Image</h3>
+    	Изображение
     	<?php echo $order->image;?> <input id="photo-image" size="50" name="order-image" type="file" >
     </div>
 </div>

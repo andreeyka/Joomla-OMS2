@@ -1,8 +1,7 @@
 	<div id="order-topmenu-container"  style="overflow:hidden;">
 		<div id="oms-user-balance" class="balance">
-		Ваш баланс: <?php echo $this->OmsUser->paymentsByStatus[1]-$this->OmsUser->ordersSum;?> руб.
-		Расход:<?php echo $this->OmsUser->ordersSum;?>
-		Приход:<?php echo $this->OmsUser->paymentsByStatus[1];?>
+		<h3>Пользователь: <?php echo $this->OmsUser->name;?> (<?php echo $this->OmsUser->username;?>).  
+		Ваш баланс: <?php echo $this->OmsUser->paymentsByStatus[1]-$this->OmsUser->ordersSum;?> руб.</h3>
 		</div>
 		<div class="clear"></div>
 		<div id="oms-menu-row">

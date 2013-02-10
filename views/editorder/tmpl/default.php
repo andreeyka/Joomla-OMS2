@@ -25,65 +25,67 @@ $order=$this->Order;
 <div id="oms-container">
 	<?php require_once (JPATH_COMPONENT.DS.'views'.DS.'tmpl'.DS.'topmenu.php');?>
     
-    <div id="table-container">
+    <div id="order-container">
     <div id="edit-order-first-row">
-    	<div id="item">
-    		<h3>Наименование</h3>
+    	<div id="order-item">
+    		<span>Наименование</span>
     		<input id="item" name="item" value="<?php echo $order->item;?>">
     	</div>
-    	<div id="item_url">
-    		<h3>Ссылка</h3>
+    	<div id="order-url">
+    		<span>Ссылка</span>
     		<input id="item-url" name="item-url" value="<?php echo $order->item_url;?>">
     	</div>
-    	<div id="status">
-    		<h3>Статус</h3>
+    	
+    </div>
+    <div id="edit-order-second-row">
+    	<div id="order-article" class="cell">
+    		Артикул 
+    		<input id="order-article" size="10" name="order-article" value="<?php echo $order->article;?>">
+    	</div>
+    	<div id="order-size" class="cell">
+    		Размер
+    		<input id="order-size" size="4" name="order-size" value="<?php echo $order->size;?>">
+    	</div>
+    	<div id="order-color" class="cell">
+    		Цвет
+    		<input id="order-color" size="10" name="order-color" value="<?php echo $order->color;?>">
+    	</div>
+    	<div id="order-amount" class="cell">
+    		Кол-во
+    		<input id="order-amount" name="order-amount" size="3" value="<?php echo $order->amount;?>">
+    	</div>
+    	<div id="order-price" class="cell">
+    		Цена
+    		<input id="order-price" name="order-price" size="5" value="<?php echo $order->price;?>">
+    	</div>
+    	<div id="order-currecy" class="cell">
+    		Валюта
+    		<?php echo oms2Helper::getCurrencySelect("order-currency",$order->currency);?>
+    	</div>
+    	<div class="clear"></div>
+    	<div id="order-currecy-rate" class="cell">
+    		Курс
+    		<input id="order-currecy-rate" name="order-currency-rate" size="5" value="<?php echo $order->currency_rate;?>">
+    	</div>
+    	<div id="order-tax" class="cell">
+    		Налог
+    		<input id="order-tax" name="order-tax" size="5" value="<?php echo $order->tax;?>">
+    	</div>
+    	<div id="order-interest" class="cell">
+    		Коммисия	
+    		<input id="order-interest" name="order-interest" size="5" value="<?php echo $order->interest;?>">
+    	</div>
+    	<div id="status" class="cell">
+    		Статус
     		<?php echo oms2Helper::getStatusSelect('order-status',$order->status,$order->status);?>
     	</div>
     </div>
-    <div id="edit-order-second-row">
-    	<div id="order-article">
-    		<h3>Артикул</h3> 
-    		<input id="order-article" size="10" name="order-article" value="<?php echo $order->article;?>">
-    	</div>
-    	<div id="order-size">
-    		<h3>Размер</h3>
-    		<input id="order-size" size="4" name="order-size" value="<?php echo $order->size;?>">
-    	</div>
-    	<div id="order-color">
-    		<h3>Цвет</h3>
-    		<input id="order-color" size="10" name="order-color" value="<?php echo $order->color;?>">
-    	</div>
-    	<div id="order-amount">
-    		<h3>Кол-во</h3>
-    		<input id="order-amount" name="order-amount" size="3" value="<?php echo $order->amount;?>">
-    	</div>
-    	<div id="order-price">
-    		<h3>Цена</h3>
-    		<input id="order-price" name="order-price" size="5" value="<?php echo $order->price;?>">
-    	</div>
-    	<div id="order-currecy">
-    		<h3>Валюта</h3>
-    		<input id="order-currecy" name="order-currency" size="5" value="<?php echo $order->currency;?>">
-    	</div>
-    	<div id="order-currecy-rate">
-    		<h3>Курс</h3>
-    		<input id="order-currecy-rate" name="order-currency-rate" size="5" value="<?php echo $order->currency_rate;?>">
-    	</div>
-    	<div id="order-tax">
-    		<h3>Налог</h3>
-    		<input id="order-tax" name="order-tax" size="5" value="<?php echo $order->tax;?>">
-    	</div>
-    	<div id="order-interest">
-    		<h3>Коммисия	</h3>
-    		<input id="order-interest" name="order-interest" size="5" value="<?php echo $order->interest;?>">
-    	</div>
-    </div>
     
-    <div id="row-order-notes"><h3>Комментарий</h3>
+    <div id="order-notes"><span>Комментарий</span>
     	<input id="order-notes" size="50" name="order-notes" value="<?php echo $order->notes;?>">
     </div>
     <div id="row-order-image">
-    	<h3>Фото</h3>
+    	Фото
     	<input id="order-image" size="50" name="order-image" type="file" >
     </div>
     <input id="form-submit" type="submit">

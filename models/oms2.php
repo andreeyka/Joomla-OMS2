@@ -247,8 +247,12 @@ class oms2ModelOms2 extends Jmodel
 	}
 	
 	function getOmsUser(){
+		$user=JFactory::getUser($this->user_id);
 		$o = new stdclass;
 		$o->user=$this->user;
+		$o->user_id=$this->user_id;
+		$o->username=$user->username;
+		$o->name=$user->name;
 		$o->ordersSum=round($this->getOrdersCosts(),2);
 		$o->paymentsByStatus=$this->getPaymentsByStatus();
 		return $o;
