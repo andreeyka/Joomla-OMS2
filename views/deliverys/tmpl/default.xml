@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-	<layout title="Oms user deliverys">
+	<layout title="Delivery layout">
 		<message>
-			<![CDATA[Oms user deliverys]]>
+			<![CDATA[Delivery layout]]>
 		</message>
 	</layout>
 	<state>
-		<name>Oms user deliverys</name>
-		<description>Oms user deliverys</description>
+		<name>Delivery layout</name>
+		<description>Delivery layout</description>
 		<params>
 		</params>
 	</state>
