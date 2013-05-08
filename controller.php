@@ -47,7 +47,6 @@ class oms2Controller extends JController
 		
 		
 		$user = JFactory::getUser();
-		
 		if ($user->get('id') == 0) {
 			$this->setRedirect('index.php', 'Not allowed');
 			return;
