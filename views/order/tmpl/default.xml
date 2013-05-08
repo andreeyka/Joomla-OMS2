@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-	<layout title="order Layout">
+	<layout title="Order layout (tmpl)">
 		<message>
-			<![CDATA[order Layout]]>
+			<![CDATA[Order layout (tmpl)]]>
 		</message>
 	</layout>
 	<state>
-		<name>order Layout</name>
-		<description>order Layout</description>
+		<name>Order layout (tmpl)</name>
+		<description>Order layout (tmpl)</description>
 		<params>
 		</params>
 	</state>
